@@ -22,3 +22,7 @@ TODO: crear y subir una imagen PNG 1200 × 630 y agregar las metaetiquetas `og:i
 ## Nota legal
 
 Proyecto independiente, sin apuestas, dinero real ni premios. Counter-Strike y sus objetos pertenecen a Valve y otros titulares.
+
+## Cotizaciones automáticas
+
+El sitio **no consulta Skinport directamente desde el navegador**. GitHub Actions ejecuta `scripts/update_prices.py` cada seis horas y guarda las cotizaciones públicas verificadas en `prices.json` (el JSON es público, las claves privadas nunca se incluyen). Para la primera publicación: en GitHub → **Actions** → **Update public CS2 skin prices** → **Run workflow** (rama `main`). Luego verificar que `prices.json` aparezca en el repositorio. Si la API falla o responde con un catálogo incompleto, la acción no sobrescribe la captura anterior. Los otros mercados pueden restringir solicitudes desde el navegador y mostrarán «Consultar» si no es posible verificar una oferta.
