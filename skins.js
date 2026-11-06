@@ -3,19 +3,7 @@ const $=id=>document.getElementById(id);
 const SOURCE="https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/skins.json";
 const SOURCE_BACKUP="https://cdn.jsdelivr.net/gh/ByMykel/CSGO-API@main/public/api/en/skins.json";
 const SKINPORT="https://api.skinport.com/v1/items?app_id=730&currency=USD&tradable=0";
-const MARKETPLACES=[
-{name:"Steam",url:"https://steamcommunity.com/market/search?appid=730&q=",search:true},
-{name:"CSFloat",url:"https://csfloat.com/"},
-{name:"CS.Money",url:"https://cs.money/"},
-{name:"DMarket",url:"https://dmarket.com/"},
-{name:"HaloSkins",url:"https://www.haloskins.com/"},
-{name:"Skinflow",url:"https://skinflow.gg/"},
-{name:"BUFF Market",url:"https://buff.market/"},
-{name:"SkinsMonkey",url:"https://skinsmonkey.com/"},
-{name:"Skinport",url:"https://skinport.com/"},
-{name:"White Market",url:"https://white.market/"},
-{name:"Waxpeer",url:"https://waxpeer.com/"}
-];
+const MARKETPLACES=[{name:"CSFloat",url:"https://csfloat.com/"},{name:"Skinport",url:"https://skinport.com/es/"},{name:"DMarket",url:"https://dmarket.com/es"}];
 const fallback=[
 {name:"AK-47 | Redline",image:null},{name:"AWP | Asiimov",image:null},{name:"M4A1-S | Printstream",image:null},
 {name:"AK-47 | Inheritance",image:null},{name:"Desert Eagle | Printstream",image:null},{name:"USP-S | Kill Confirmed",image:null}
@@ -33,7 +21,7 @@ function preview(item){const stage=mk("div","market-visual");const fallbackBox=m
 function normalizeSkins(data){if(!Array.isArray(data))throw Error("Catálogo no disponible");const map=new Map();
 for(const x of data){if(!x||typeof x.name!=="string"||!x.name.includes("|")||x.name.length>180)continue;if(!/^(?:[★ ]*)?(?:AK-47|AWP|M4A1-S|M4A4|USP-S|Glock-18|Desert Eagle|FAMAS|Galil AR|MAC-10|MP9|MP7|UMP-45|P90|P250|Five-SeveN|Tec-9|SSG 08|AUG|SG 553|G3SG1|SCAR-20|Nova|XM1014|Sawed-Off|MAG-7|Negev|M249|CZ75-Auto|Dual Berettas|R8 Revolver|PP-Bizon|Zeus x27|Knife|Karambit|Bayonet|Gloves|Hand Wraps|Butterfly Knife|Talon Knife|Skeleton Knife|Kukri Knife|Falchion Knife|Huntsman Knife|Stiletto Knife|Gut Knife|Flip Knife|Shadow Daggers|Navaja Knife|Ursus Knife|Bowie Knife|Paracord Knife|Survival Knife|Classic Knife|Nomad Knife)\s*\|/i.test(x.name))continue;
  const img=assetUrl(x.image);const existing=map.get(x.name);if(!existing||(!existing.image&&img))map.set(x.name,{name:x.name,image:img})}
- if(map.size<50)throw Error("No se recibieron suficientes skins");return [...map.values()]}
+ if(map.size<50)throw Error("No se recibieron suficientes skins");const images=new Map();const base=name=>name.replace(/\s*\((Factory New|Minimal Wear|Field-Tested|Well-Worn|Battle-Scarred)\)$/,"").replace(/^(StatTrak™|Souvenir)\s+/,"");for(const x of map.values())if(x.image&&!images.has(base(x.name)))images.set(base(x.name),x.image);for(const x of map.values())if(!x.image)x.image=images.get(base(x.name))||null;return [...map.values()]}
 async function fetchJson(url,ms){const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),ms);try{const r=await fetch(url,{signal:ac.signal,cache:"force-cache"});if(!r.ok)throw Error("HTTP "+r.status);return await r.json()}finally{clearTimeout(timer)}}
 function parseSkinport(data){if(!Array.isArray(data))throw Error("Formato incorrecto");const result=new Map();
 for(const v of data){if(!v||typeof v.market_hash_name!=="string"||!v.market_hash_name.includes("|"))continue;
