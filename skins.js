@@ -78,6 +78,9 @@ async function load(){
   ?"Precios Skinport "+(old?"(última captura, puede estar desactualizada)":"(captura pública)")+(time?" · "+time:"")
   :"Sin datos de precios todavía. El archivo automático se publica desde GitHub Actions.";
  status.textContent=(imageResult.status==="fulfilled"?"Imágenes de CS2 cargadas. ":"Catálogo reducido de respaldo. ")+pricesLabel;
+ // Price sorting is meaningless until we have a verified snapshot.
+ for(const option of $("sort-filter").options){if(option.value==="low"||option.value==="high")option.disabled=state.offers.size===0}
+ if(state.offers.size===0&&state.sort!=="name"){state.sort="name";$("sort-filter").value="name"}
  $("refresh-prices").disabled=false;render();
 }
 function visibleRows(){const q=clean(state.query).trim();const result=state.catalog.filter(x=>(!q||clean(x.name).includes(q))&&(!state.weapon||x.name.replace(/^★\s*/,"").startsWith(state.weapon+" |")||(state.weapon==="Knife"&&/knife|karambit|bayonet|daggers/i.test(x.name))||(state.weapon==="Gloves"&&/gloves|hand wraps/i.test(x.name))));
