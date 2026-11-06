@@ -37,3 +37,39 @@
 @media(prefers-reduced-motion:reduce){.scene-depth,.sculpture-core,.orbit{animation:none!important}}
 
 .hero-socials{display:flex;flex-wrap:wrap;gap:8px 17px;margin-top:23px;padding-top:19px;border-top:1px solid #ffffff25}.hero-socials a{color:#d6bd98;text-decoration:none;font-size:.83rem;font-weight:750;min-height:44px;display:inline-flex;align-items:center}.hero-socials a:hover{color:#fff;text-decoration:underline}
+
+/* HERO MOTION v3: pure CSS 3D. No WebGL request, no static image, no build step. */
+.hero-motion{--tilt-x:0deg;--tilt-y:0deg;perspective:1100px;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 50% 49%,#342a206b 0%,#1c2229 38%,#090d13 82%)}
+.hero-motion:after{z-index:1;pointer-events:none}
+.motion-stage{position:absolute;inset:0;transform-style:preserve-3d;perspective:950px;transform:rotateX(var(--tilt-x)) rotateY(var(--tilt-y));transition:transform .22s ease-out;pointer-events:none}
+.motion-stage:before{content:"";position:absolute;left:50%;top:51%;width:min(79vw,490px);height:min(79vw,490px);border-radius:50%;background:radial-gradient(circle,#dda86624,transparent 65%);transform:translate(-50%,-50%);filter:blur(20px);animation:motion-breathe 4s ease-in-out infinite}
+.motion-stars{position:absolute;inset:0;opacity:.65;background-image:radial-gradient(#deb37884 1px,transparent 2px),radial-gradient(#eae5d060 1px,transparent 2px);background-position:11px 12px,37px 60px;background-size:123px 117px,183px 191px;animation:motion-star-drift 19s linear infinite;mask-image:radial-gradient(ellipse,black 12%,transparent 76%)}
+.motion-turntable{position:absolute;left:50%;top:49%;width:310px;height:206px;transform:translate(-50%,-50%) rotateX(-13deg) rotateY(-22deg);transform-style:preserve-3d;animation:motion-rotate 9s linear infinite;filter:drop-shadow(0 25px 40px #0008);will-change:transform}
+.motion-logo{position:absolute;inset:0;display:grid;place-items:center;font:900 111px/1 Inter,Arial,sans-serif;letter-spacing:-.11em;color:#e7c08a;backface-visibility:hidden;border:1px solid #e3b87985;box-shadow:inset 0 0 48px #d5a4612f,0 0 35px #daa36218;background:linear-gradient(132deg,#574632,#151b21 51%,#5e4b37);text-shadow:0 2px 5px #0009}
+.motion-logo-front{transform:translateZ(45px)}
+.motion-logo-back{transform:rotateY(180deg) translateZ(45px)}
+.motion-logo-right,.motion-logo-left{width:90px;left:110px;background:linear-gradient(90deg,#312c27,#a78960 55%,#343234);box-shadow:inset 0 0 35px #0006}
+.motion-logo-right{transform:rotateY(90deg) translateZ(155px)}
+.motion-logo-left{transform:rotateY(-90deg) translateZ(155px)}
+.motion-logo-top,.motion-logo-bottom{height:90px;top:58px;background:linear-gradient(#b1946d,#303137)}
+.motion-logo-top{transform:rotateX(90deg) translateZ(103px)}
+.motion-logo-bottom{transform:rotateX(-90deg) translateZ(103px)}
+.motion-logo-shadow{border:0;background:transparent;box-shadow:none;transform:translateZ(-48px);filter:blur(40px);opacity:.2}
+.motion-halo{position:absolute;left:50%;top:49%;border:1px solid #ca9d6a84;border-radius:50%;transform-style:preserve-3d;box-shadow:0 0 30px #d6a06217,inset 0 0 20px #bf915a14}
+.motion-halo-a{width:450px;height:450px;animation:motion-orbit-a 13s linear infinite}
+.motion-halo-b{width:345px;height:345px;border-color:#6b88a975;animation:motion-orbit-b 17s linear infinite}
+.motion-spark{position:absolute;width:6px;height:6px;background:#eac58f;border-radius:50%;box-shadow:0 0 20px 6px #dba55a4b;animation:motion-spark 3s ease-in-out infinite alternate}
+.motion-spark-one{left:21%;top:32%}.motion-spark-two{left:76%;top:59%;animation-delay:.8s}.motion-spark-three{left:65%;top:25%;animation-delay:1.7s}
+.hero-motion .hero-visual-caption{z-index:5}
+.hero-motion .motion-toggle{position:absolute;right:24px;bottom:28px;z-index:8;display:flex;align-items:center;gap:11px;min-height:44px;padding:9px 13px;border:1px solid #b99b777d;border-radius:6px;background:#111820d9;color:#ead3b4;font:700 12px Inter,Arial,sans-serif;cursor:pointer;backdrop-filter:blur(8px)}
+.hero-motion .motion-toggle:hover{border-color:#f1c182;background:#24303b}
+.hero-motion>small{z-index:6;position:absolute;left:24px;bottom:32px}
+.hero-motion.is-paused .motion-stage *, .hero-motion.is-paused .motion-stars{animation-play-state:paused!important}
+@keyframes motion-rotate{0%{transform:translate(-50%,-50%) rotateX(-13deg) rotateY(0deg)}100%{transform:translate(-50%,-50%) rotateX(-13deg) rotateY(360deg)}}
+@keyframes motion-orbit-a{0%{transform:translate(-50%,-50%) rotateX(68deg) rotateY(12deg) rotateZ(0deg)}100%{transform:translate(-50%,-50%) rotateX(68deg) rotateY(12deg) rotateZ(360deg)}}
+@keyframes motion-orbit-b{0%{transform:translate(-50%,-50%) rotateY(72deg) rotateX(32deg) rotateZ(0deg)}100%{transform:translate(-50%,-50%) rotateY(72deg) rotateX(32deg) rotateZ(-360deg)}}
+@keyframes motion-breathe{0%,100%{opacity:.65;scale:.94}50%{opacity:1;scale:1.09}}
+@keyframes motion-star-drift{to{background-position:134px 129px,220px 251px}}
+@keyframes motion-spark{to{opacity:.16;scale:.45;translate:0 20px}}
+@media(max-width:700px){.motion-stage{scale:.75}.hero-motion .motion-toggle{right:15px;bottom:19px}.hero-motion>small{left:15px;bottom:29px;font-size:.6rem}}
+@media(prefers-reduced-motion:reduce){.hero-motion .motion-stage *,.hero-motion .motion-stars{animation-duration:45s!important}.hero-motion.is-paused .motion-stage *,.hero-motion.is-paused .motion-stars{animation-play-state:paused!important}}
