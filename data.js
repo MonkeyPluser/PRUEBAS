@@ -6,14 +6,20 @@ window.FRAN_DATA={
  {label:"TikTok",value:13255,display:"13,2K+"},
  {label:"Instagram",value:3635,display:"3,6K+"},
  {label:"Discord",value:4252,display:"4,2K+"}]},
- social:{tiktok:"https://www.tiktok.com/@franv6x",instagram:"https://www.instagram.com/franv6x/",kick:"https://kick.com/franv6x",youtube:"https://www.youtube.com/@franv6x",discord:null /* TODO: invitación real */},
+ social:{tiktok:"https://www.tiktok.com/@franv6x",instagram:"https://www.instagram.com/franv6x/",kick:"https://kick.com/franv6x",youtube:"https://www.youtube.com/@franv6x",discord:"https://discord.gg/gtzqGnXJwG"},
  contact:{email:null /* TODO: correo comercial verificado */,mediaKit:null /* TODO: URL pública del media kit */},
- /* TODO: reemplazar referencias externas por tus propios mapas oficiales. No se atribuyen al canal. */
+ /* Mapas seleccionados por FranV6X. Se atribuye su autoría original; no implica que FranV6X los haya creado. */
  maps:[
- {name:"Aim Botz — Aim Training",author:"Mr. uLLeticaL",category:"Aim",difficulty:"Todos los niveles",description:"Práctica de precisión y control con bots.",steamId:"3070244462",image:null,reference:true},
- {name:"Recoil Master — Spray Training",author:"Mr. uLLeticaL",category:"Control",difficulty:"Intermedio",description:"Patrones y control de retroceso.",steamId:"3100869952",image:null,reference:true},
- {name:"Fast Aim / Reflex Training",author:"yolokas",category:"Aim",difficulty:"Intermedio",description:"Reflejos y reacción ante objetivos móviles.",steamId:"3070758981",image:null,reference:true}
- ],
+ {"name":"Aim_Rush / Aim training map","author":"JoeyyBiden$$","category":"Aim","difficulty":"Todos los niveles","description":"Rutina de aim y reacción contra bots.","steamId":"3105821815","image":null,"reference":true},
+ {"name":"Mirage Prefire","author":"leander / lmtlss","category":"Prefire","difficulty":"Intermedio","description":"Practica ángulos y entradas de Mirage.","steamId":"3267302800","image":null,"reference":true},
+ {"name":"Mirage Utility","author":"leander / lmtlss / !!!","category":"Utilidad","difficulty":"Todos los niveles","description":"Smokes, flashes y molotovs para Mirage.","steamId":"3312981414","image":null,"reference":true},
+ {"name":"Dust 2 Prefire","author":"leander / lmtlss","category":"Prefire","difficulty":"Intermedio","description":"Limpiá posiciones y entrená entradas en Dust 2.","steamId":"3295650711","image":null,"reference":true},
+ {"name":"Movement Hub","author":"yuuri14","category":"Movimiento","difficulty":"Todos los niveles","description":"Técnicas de movimiento y práctica de desplazamiento.","steamId":"3355497176","image":null,"reference":true},
+ {"name":"awp_training_dust_2","author":"BRIAN","category":"AWP","difficulty":"Intermedio","description":"Entrenamiento con AWP en Dust 2.","steamId":"3497458619","image":null,"reference":true},
+ {"name":"5e_aimhub_legecy","author":"7ychu5 / 5EPlay","category":"Aim","difficulty":"Todos los niveles","description":"Hub de ejercicios de puntería.","steamId":"3698358490","image":null,"reference":true},
+ {"name":"Procedurally Generated Training Map","author":"OrelStealth","category":"Aim","difficulty":"Avanzado","description":"Escenarios variables generados para entrenar.","steamId":"3808451248","image":null,"reference":true},
+ {"name":"Mattiak Aim Trainer","author":"iLoveShotgun","category":"Aim","difficulty":"Todos los niveles","description":"Entrenamiento de precisión y reacción.","steamId":"3815529428","image":null,"reference":true}
+ ]
  /* TODO: links exactos de 3 a 6 clips destacados. */
  clips:[],
  collaborations:[{name:"Hit Gaming",note:"Colaboración realizada; resultado cuantitativo pendiente."}],
