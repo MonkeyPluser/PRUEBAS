@@ -7,6 +7,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.m
 export async function mountScene(config=window.V6X_CONFIG){
  const host=document.getElementById("hero-art"),canvas=document.getElementById("hero-canvas");
  if(!host||!canvas)return;
+ host.dataset.concept=config?.sceneConcept==="archive"?"archive":"industrial";
  const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
  const cores=navigator.hardwareConcurrency||4;
  const memory=navigator.deviceMemory||4;
@@ -25,7 +26,6 @@ export async function mountScene(config=window.V6X_CONFIG){
   camera=new THREE.PerspectiveCamera(38,1,.1,100);camera.position.set(0,0,11.5);
   scene.add(new THREE.AmbientLight(0x9fabb7,.95));
   const archive=config?.sceneConcept==="archive";
-  host.dataset.concept=archive?"archive":"industrial";
   const accent=new THREE.Color(config?.accent||"#D8A764"),blue=new THREE.Color(config?.secondary||"#68819B");
   const key=new THREE.DirectionalLight(accent,4.5);key.position.set(-4,4,6);scene.add(key);
   const rim=new THREE.DirectionalLight(blue,3.2);rim.position.set(3,-1,-4);scene.add(rim);
