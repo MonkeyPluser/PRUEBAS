@@ -35,3 +35,5 @@
 @keyframes orbit-v6x{to{rotate:360deg}}
 @media(max-width:600px){.sculpture-core{scale:.75}.orbit{width:300px;height:300px}.hero-visual-caption{font-size:.58rem;left:17px;right:17px}}
 @media(prefers-reduced-motion:reduce){.scene-depth,.sculpture-core,.orbit{animation:none!important}}
+
+.hero-socials{display:flex;flex-wrap:wrap;gap:8px 17px;margin-top:23px;padding-top:19px;border-top:1px solid #ffffff25}.hero-socials a{color:#d6bd98;text-decoration:none;font-size:.83rem;font-weight:750;min-height:44px;display:inline-flex;align-items:center}.hero-socials a:hover{color:#fff;text-decoration:underline}
