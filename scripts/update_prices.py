@@ -5,13 +5,14 @@ Only public market listings are stored, never credentials or account data.
 The file is updated by GitHub Actions and served statically by GitHub Pages.
 """
 import json
+import subprocess
 import os
 import sys
 import tempfile
+from urllib.parse import urlencode
 from datetime import datetime, timezone
 from pathlib import Path
 
-import requests
 
 URL = "https://api.skinport.com/v1/items"
 DEST = Path(__file__).resolve().parents[1] / "prices.json"
@@ -19,14 +20,21 @@ MAX_ITEMS = 40000
 
 
 def main():
-    response = requests.get(
-        URL,
-        params={"app_id": 730, "currency": "USD", "tradable": 0},
-        headers={"Accept": "application/json", "Accept-Encoding": "br", "User-Agent": "FranV6X-PublicPriceCache/1.0"},
-        timeout=(12, 50),
-    )
-    response.raise_for_status()
-    records = response.json()
+    # curl handles Brotli content negotiation independently from older Python
+    # requests/urllib3 decoders on GitHub runners.
+    endpoint = URL + "?" + urlencode({"app_id": 730, "currency": "USD", "tradable": 0})
+    command = [
+        "curl", "--fail", "--silent", "--show-error", "--location",
+        "--compressed", "--max-time", "50", "--retry", "0",
+        "-H", "Accept: application/json",
+        "-H", "Accept-Encoding: br",
+        "-H", "User-Agent: FranV6X-PublicPriceCache/1.0",
+        endpoint,
+    ]
+    process = subprocess.run(command, capture_output=True, timeout=60, check=False)
+    if process.returncode != 0:
+        raise RuntimeError("Skinport request failed: " + process.stderr.decode("utf-8", "replace")[-400:])
+    records = json.loads(process.stdout)
     if not isinstance(records, list) or not 100 < len(records) <= MAX_ITEMS:
         raise ValueError("Unexpected Skinport public catalog size")
 
