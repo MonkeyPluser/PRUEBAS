@@ -47,11 +47,54 @@ function render(){const rows=visibleRows(),shown=rows.slice(0,state.limit),root=
 for(const x of shown)frag.append(skinCard(x));root.replaceChildren(frag);
 $("results-count").textContent=rows.length.toLocaleString("es-AR")+" skins · "+state.offers.size.toLocaleString("es-AR")+" acabados con precio de referencia";
 $("market-empty").hidden=rows.length>0;const next=$("load-more");next.hidden=shown.length>=rows.length;next.textContent="Mostrar más ("+(rows.length-shown.length).toLocaleString("es-AR")+")"}
-function compare(x){state.selected=x;const dialog=$("market-dialog"),list=$("market-offers"),quote=state.offers.get(x.name);$("market-dialog-title").textContent=x.name;$("market-dialog-context").textContent="Precios mínimos publicados únicamente cuando hay datos verificados; cada botón abre el sitio correspondiente.";list.replaceChildren();
-for(const provider of MARKETPLACES){const row=mk("div","offer-row");row.append(mk("strong","",provider.name));
-const q=provider.name==="Skinport"?quote:null;const display=mk("span",q?"verified-quote":"missing-quote",q?money(q.price):"Consultar");row.append(display);
-const a=mk("a","btn btn-ghost",q?"Ver oferta ↗":"Abrir mercado ↗");a.href=q?q.link:(provider.search?provider.url+encodeURIComponent(x.name):provider.url);a.target="_blank";a.rel="noopener noreferrer";row.append(a);list.append(row)}
-dialog.showModal();document.body.classList.add("modal-open");$("market-dialog-close").focus()}
+
+async function fetchCSFloat(name){
+ const url="https://csfloat.com/api/v1/listings?limit=1&type=buy_now&sort_by=lowest_price&market_hash_name="+encodeURIComponent(name);
+ const result=await fetchJson(url,6500);
+ const listings=Array.isArray(result.data)?result.data:Array.isArray(result.listings)?result.listings:[];
+ const offer=listings.find(v=>v?.item?.market_hash_name===name&&Number.isFinite(v.price)&&v.price>0);
+ if(!offer)throw Error("sin oferta");
+ return {price:offer.price/100,url:"https://csfloat.com/item/"+encodeURIComponent(offer.id)};
+}
+async function fetchDMarket(name){
+ const url="https://api.dmarket.com/exchange/v1/market/items?gameId=a8db&currency=USD&limit=30&title="+encodeURIComponent(name);
+ const result=await fetchJson(url,6500);
+ const listings=Array.isArray(result.objects)?result.objects:[];
+ // The public endpoint quotes amounts in USD minor units (cents).
+ const offers=listings.filter(v=>v?.title===name&&Number.isFinite(Number(v?.price?.USD))&&Number(v.price.USD)>0);
+ if(!offers.length)throw Error("sin oferta");
+ const cheapest=offers.reduce((a,b)=>Number(a.price.USD)<Number(b.price.USD)?a:b);
+ return {price:Number(cheapest.price.USD)/100,url:"https://dmarket.com/es"};
+}
+async function queryMarket(name,provider,amount,link){
+ try{
+  const result=provider==="CSFloat"?await fetchCSFloat(name):await fetchDMarket(name);
+  if(!Number.isFinite(result.price)||result.price<=0)throw Error("precio inválido");
+  amount.className="verified-quote";
+  amount.textContent=money(result.price);
+  link.href=result.url;
+  link.textContent="Ver oferta ↗";
+ }catch(e){amount.textContent="Consultar";link.textContent="Abrir mercado ↗";}
+}
+function compare(x){
+ state.selected=x;
+ const dialog=$("market-dialog"),list=$("market-offers"),quote=state.offers.get(x.name);
+ const variant=quote?.variant||x.name+" (Field-Tested)";
+ $("market-dialog-title").textContent=x.name;
+ $("market-dialog-context").textContent="Cotizaciones para "+variant+". Si una API no responde, consultá el proveedor directamente.";
+ list.replaceChildren();
+ for(const provider of MARKETPLACES){
+  const row=mk("div","offer-row");row.append(mk("strong","",provider.name));
+  const q=provider.name==="Skinport"?quote:null;
+  const amount=mk("span",q?"verified-quote":"missing-quote",q?money(q.price):"Consultando…");
+  const link=mk("a","btn btn-ghost",q?"Ver oferta ↗":"Abrir mercado ↗");
+  link.href=q?q.link:provider.url;link.target="_blank";link.rel="noopener noreferrer";
+  row.append(amount,link);list.append(row);
+  if(provider.name!=="Skinport")queryMarket(variant,provider.name,amount,link);
+  else if(!q)amount.textContent="Consultar";
+ }
+ dialog.showModal();document.body.classList.add("modal-open");$("market-dialog-close").focus();
+}
 function init(){const providerBar=$("market-providers");for(const p of MARKETPLACES){const b=mk("span","provider-chip",p.name);providerBar.append(b)}
 $("skin-search").addEventListener("input",e=>{state.query=e.target.value;state.limit=48;render()});
 $("weapon-filter").addEventListener("change",e=>{state.weapon=e.target.value;state.limit=48;render()});
