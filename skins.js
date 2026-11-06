@@ -46,7 +46,21 @@ if(prices){state.items=prices.map(x=>({...x,image:images.get(x.name)||null}));st
 else{
  state.items=FBACK.map(name=>({name,price:null,link:uri(name),image:images.get(name)||null}));
  state.mode="offline";status.textContent="No se pudieron consultar precios actuales. Mostramos una selección sin valores; probá actualizar."}
-state.visible=40;refresh.disabled=false;render()}
+state.visible=40;refresh.disabled=false;render();if(state.imageMap.size===0)enhanceImages()}
+/* Independent image/catalog backup sourced from the community-maintained CS2 catalog.
+   It is requested only if the price provider has no usable images. */
+async function enhanceImages(){
+ try{
+  const raw=await loadJson("https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/skins.json",9000);
+  if(!Array.isArray(raw))return;
+  const map=new Map();for(const item of raw){if(typeof item?.name==="string"&&isHttp(item?.image))map.set(item.name,item.image)}
+  if(state.mode==="offline"&&map.size){
+   state.items=[...map.entries()].map(([name,image])=>({name,price:null,link:uri(name),image}));state.visible=40;
+   $("feed-status").textContent="Catálogo visual disponible · los precios están temporalmente fuera de servicio";
+  }else{state.items=state.items.map(item=>({...item,image:item.image||map.get(item.name.replace(/\s*\((Factory New|Minimal Wear|Field-Tested|Well-Worn|Battle-Scarred)\)$/,"").replace(/^StatTrak™\s*/,""))||null}))}
+  render()
+ }catch(e){console.info("Catálogo visual alternativo no disponible",e)}
+}
 function formatDate(v){const d=new Date(v);return Number.isNaN(d.getTime())?"":d.toLocaleString("es-AR",{dateStyle:"short",timeStyle:"short"})}
 function filter(){const q=clean(state.search).trim();let items=state.items.filter(x=>(!q||clean(x.name).includes(q))&&(!state.weapon||getWeapon(x.name)===state.weapon));
 if(state.sort==="name")items.sort((a,b)=>a.name.localeCompare(b.name));
