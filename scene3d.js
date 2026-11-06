@@ -13,6 +13,7 @@ export async function mountScene(config=window.V6X_CONFIG){
  const memory=navigator.deviceMemory||4;
  const saveData=navigator.connection?.saveData===true;
  if(reduced||saveData||cores<=2||memory<=2)return; // quality fallback, no heavy GPU
+ try{if(typeof navigator.getBattery==="function"){const battery=await navigator.getBattery();if(!battery.charging&&battery.level<.18)return}}catch{} // API not supported on most devices
  if(!canvas.getContext("webgl2")&&!canvas.getContext("webgl"))return;
  let renderer,scene,camera,group,resizeObserver,observer,raf=0,visible=true,disposed=false;
  const geometry=[],materials=[],pointer={x:0,y:0},gyro={x:0,y:0};
