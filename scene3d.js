@@ -21,9 +21,11 @@ export async function mountScene(config=window.V6X_CONFIG){
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure=1.35;
-  scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x0a1016,.035);
+  scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x0a1016,config?.sceneConcept==="archive"?.018:.035);
   camera=new THREE.PerspectiveCamera(38,1,.1,100);camera.position.set(0,0,11.5);
   scene.add(new THREE.AmbientLight(0x9fabb7,.95));
+  const archive=config?.sceneConcept==="archive";
+  host.dataset.concept=archive?"archive":"industrial";
   const accent=new THREE.Color(config?.accent||"#D8A764"),blue=new THREE.Color(config?.secondary||"#68819B");
   const key=new THREE.DirectionalLight(accent,4.5);key.position.set(-4,4,6);scene.add(key);
   const rim=new THREE.DirectionalLight(blue,3.2);rim.position.set(3,-1,-4);scene.add(rim);
@@ -49,12 +51,12 @@ export async function mountScene(config=window.V6X_CONFIG){
   glyph(polygon([[1.44,1.95],[1.96,1.95],[.52,0],[0,0]]),1.43);
   group.position.x=-.23;group.rotation.y=-.22;group.rotation.x=.08;
 
-  const floor=new THREE.Group();scene.add(floor);floor.rotation.x=-Math.PI/2.7;floor.position.set(0,-2.4,-2.2);
+  const floor=new THREE.Group();scene.add(floor);floor.rotation.x=-Math.PI/2.7;floor.position.set(0,archive?-3.4:-2.4,-2.2);
   for(let i=-7;i<=7;i++){const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(i*.75,-7,0),new THREE.Vector3(i*.75,7,0)]);geometry.push(g);floor.add(new THREE.Line(g,floorMaterial))}
   for(let j=-7;j<=7;j++){const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-7,j*.75,0),new THREE.Vector3(7,j*.75,0)]);geometry.push(g);floor.add(new THREE.Line(g,floorMaterial))}
   // Sparse architectural fins, deliberately abstract and not maps from CS2.
   for(let i=0;i<5;i++){const g=new THREE.BoxGeometry(.13,2+i*.17,.19);geometry.push(g);const m=new THREE.Mesh(g,atmospheric);m.position.set(-5+i*2.5,-.6,-3.9);scene.add(m)}
-  const count=window.innerWidth<650?65:140,positions=new Float32Array(count*3);
+  const count=window.innerWidth<650?65:(archive?85:140),positions=new Float32Array(count*3);
   for(let i=0;i<count;i++){positions[i*3]=(Math.random()-.5)*13;positions[i*3+1]=(Math.random()-.5)*8;positions[i*3+2]=(Math.random()-.5)*7-2}
   const dustGeo=new THREE.BufferGeometry();dustGeo.setAttribute("position",new THREE.BufferAttribute(positions,3));geometry.push(dustGeo);
   const dustMat=new THREE.PointsMaterial({color:accent,size:.017,transparent:true,opacity:.42,depthWrite:false});materials.push(dustMat);
