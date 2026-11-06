@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090c10">
+<meta name="description" content="FranV6X Skin Market: catálogo de skins de Counter-Strike 2, búsqueda, filtros y precios mínimos publicados en SkinCash, cuando estén disponibles.">
+<link rel="canonical" href="https://monkeypluser.github.io/PRUEBAS/skins.html">
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<meta property="og:type" content="website"><meta property="og:locale" content="es_AR">
+<meta property="og:title" content="FranV6X · Skin Market">
+<meta property="og:description" content="Explorá skins de CS2 con imágenes, filtros y precios publicados cuando hay datos disponibles.">
+<meta property="og:url" content="https://monkeypluser.github.io/PRUEBAS/skins.html">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="FranV6X · Skin Market">
+<link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./skins.css">
+<script src="./skins.js" defer></script>
+<title>Skin Market · FranV6X</title>
+</head>
+<body>
+<a href="#catalogo" class="skip">Saltar al catálogo</a>
+<header class="site-header"><div class="container header-inner">
+<a class="brand" href="./index.html">FRAN<b>V6X</b></a>
+<nav class="menu market-nav" aria-label="Navegación del mercado"><a href="./index.html">Volver al inicio</a><a href="./index.html#workshop">Workshop</a><a href="https://discord.gg/gtzqGnXJwG" rel="noopener noreferrer" target="_blank">Discord</a></nav>
+<a class="btn btn-primary header-cta" href="./index.html#colaboraciones">Colaboraciones</a>
+</div></header>
+<main id="catalogo">
+<section class="market-hero"><div class="container">
+<div class="eyebrow">FRANV6X / ARCHIVO DE COUNTER-STRIKE</div>
+<div class="market-heading"><div><h1>Skin <em>Market.</em></h1><p>Explorá el catálogo, compará acabados y consultá precios publicados. Sin cajas, sin apuestas y sin dinero dentro de esta web.</p></div><div class="market-status"><span class="live-circle"></span><span id="feed-status" role="status" aria-live="polite">Conectando con el catálogo…</span></div></div>
+<div class="market-disclaimer">Los valores son precios mínimos publicados por <strong>SkinCash</strong> en USD para cada artículo y desgaste, no precios universales ni recomendaciones financieras. Pueden cambiar y no incluyen necesariamente todas las ofertas del mercado.</div>
+</div></section>
+<section class="market-body"><div class="container">
+<div class="market-toolbar">
+<label class="market-search"><span class="sr-only">Buscar skins</span><input id="skin-search" type="search" placeholder="Buscar arma, skin o acabado…" autocomplete="off" aria-label="Buscar skins"></label>
+<label class="market-field"><span class="sr-only">Tipo de arma</span><select id="weapon-filter" aria-label="Filtrar por arma"><option value="">Todas las armas</option><option>AK-47</option><option>AWP</option><option>M4A1-S</option><option>M4A4</option><option>USP-S</option><option>Glock-18</option><option>Desert Eagle</option><option>Knife</option><option>Gloves</option></select></label>
+<label class="market-field"><span class="sr-only">Orden</span><select id="sort-filter" aria-label="Ordenar resultados"><option value="low">Menor precio disponible</option><option value="high">Mayor precio disponible</option><option value="name">Nombre A–Z</option></select></label>
+</div>
+<div class="market-summary"><p id="results-count">Preparando catálogo…</p><button id="refresh-prices" class="btn btn-ghost" type="button">Actualizar precios</button></div>
+<div class="market-grid" id="skin-grid" aria-live="off"><div class="market-loading">Cargando skins…</div></div>
+<div id="market-empty" class="market-empty" hidden><p>No encontramos artículos con esos filtros.</p><button class="btn btn-ghost" id="clear-filters" type="button">Limpiar filtros</button></div>
+<div class="market-pagination"><button id="load-more" type="button" class="btn btn-ghost" hidden>Mostrar más skins</button></div>
+<div class="market-note"><strong>Información sobre precios:</strong> cada variante (Factory New, Field-Tested, StatTrak™, etc.) puede tener su propio precio. Si la fuente no responde, los precios aparecen como «No disponible»; nunca como $0. El enlace «Consultar en Steam» permite buscar el artículo en el mercado oficial.</div>
+</div></section>
+</main>
+<footer class="footer"><div class="container footer-content"><div><div class="brand">FRAN<b>V6X</b></div><p class="legal">Sitio independiente y no afiliado a Valve ni a SkinCash. Counter-Strike y sus objetos pertenecen a sus titulares. Los datos de precios son de terceros, pueden variar y no constituyen asesoramiento financiero. Sin apuestas ni premios.</p></div><div><a href="./index.html">Inicio</a><a href="./index.html#workshop">Workshop</a><a href="https://discord.gg/gtzqGnXJwG" rel="noopener noreferrer" target="_blank">Discord</a></div></div></footer>
+</body></html>
