@@ -8,7 +8,7 @@ const fallback=[
 {name:"AK-47 | Redline",image:null},{name:"AWP | Asiimov",image:null},{name:"M4A1-S | Printstream",image:null},
 {name:"AK-47 | Inheritance",image:null},{name:"Desert Eagle | Printstream",image:null},{name:"USP-S | Kill Confirmed",image:null}
 ];
-const state={catalog:[],offers:new Map(),mode:"loading",limit:48,query:"",weapon:"",sort:"name",selected:null,updated:null,token:0};
+const state={catalog:[],offers:new Map(),mode:"loading",limit:48,query:"",weapon:"",sort:"name",selected:null,updated:null,token:0,provider:"Skinport"};
 const money=v=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(v);
 const mk=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=String(txt);return n};
 const okayUrl=s=>{try{const u=new URL(s);return u.protocol==="https:"}catch{return false}};
@@ -86,13 +86,29 @@ async function load(){
 function visibleRows(){const q=clean(state.query).trim();const result=state.catalog.filter(x=>(!q||clean(x.name).includes(q))&&(!state.weapon||x.name.replace(/^★\s*/,"").startsWith(state.weapon+" |")||(state.weapon==="Knife"&&/knife|karambit|bayonet|daggers/i.test(x.name))||(state.weapon==="Gloves"&&/gloves|hand wraps/i.test(x.name))));
 result.sort((a,b)=>{const pa=state.offers.get(a.name)?.price,pb=state.offers.get(b.name)?.price;
 if(state.sort==="low"||state.sort==="high"){const A=pa??(state.sort==="low"?Infinity:-Infinity),B=pb??(state.sort==="low"?Infinity:-Infinity);return state.sort==="low"?A-B||a.name.localeCompare(b.name):B-A||a.name.localeCompare(b.name)}return a.name.localeCompare(b.name)});return result}
-function skinCard(x){const card=mk("article","market-card");card.append(preview(x));const body=mk("div","market-info"),quote=state.offers.get(x.name);body.append(mk("h2","",x.name));
-body.append(mk("div",quote?"market-price":"market-price not-available",quote?"Desde "+money(quote.price):"Consultar precio"));
-body.append(mk("span","market-source",quote?("Skinport · "+(quote.variant.match(/\(([^)]+)\)/)?.[1]||"disponible")):"Sin cotización automática verificada"));
-const btn=mk("button","market-action market-compare","Comparar mercados");btn.type="button";btn.addEventListener("click",()=>compare(x));body.append(btn);card.append(body);return card}
+function providerSearch(item,provider){
+ const selected=MARKETPLACES.find(m=>m.name===provider);
+ if(provider==="Skinport")return "https://skinport.com/es/market?search="+encodeURIComponent(item.name);
+ if(provider==="CSFloat")return "https://csfloat.com/search?market_hash_name="+encodeURIComponent(item.name);
+ if(provider==="DMarket")return "https://dmarket.com/es/ingame-items/item-list/csgo-skins?title="+encodeURIComponent(item.name);
+ return selected?.url||"https://steamcommunity.com/market/";
+}
+function skinCard(x){
+ const card=mk("article","market-card");card.append(preview(x));const body=mk("div","market-info");
+ const quote=state.provider==="Skinport"?state.offers.get(x.name):null;
+ body.append(mk("h2","",x.name));
+ body.append(mk("div",quote?"market-price":"market-price not-available",quote?"Desde "+money(quote.price):"Consultar precio"));
+ body.append(mk("span","market-source",quote?"Mínimo publicado por Skinport · "+(quote.variant.match(/\(([^)]+)\)/)?.[1]||"varios desgastes"):"Sin precio verificado de "+state.provider));
+ const actions=mk("div","skin-card-actions");
+ const action=mk("a","market-action market-compare","Buscar en "+state.provider+" ↗");
+ action.href=quote?.link||providerSearch(x,state.provider);action.target="_blank";action.rel="noopener noreferrer";
+ const compareButton=mk("button","market-action market-compare","Comparar mercados");
+ compareButton.type="button";compareButton.addEventListener("click",()=>compare(x));
+ actions.append(action,compareButton);body.append(actions);card.append(body);return card;
+}
 function render(){const rows=visibleRows(),shown=rows.slice(0,state.limit),root=$("skin-grid"),frag=document.createDocumentFragment();
 for(const x of shown)frag.append(skinCard(x));root.replaceChildren(frag);
-$("results-count").textContent=rows.length.toLocaleString("es-AR")+" skins · "+state.offers.size.toLocaleString("es-AR")+" acabados con precio de referencia";
+$("results-count").textContent=rows.length.toLocaleString("es-AR")+" skins · "+state.offers.size.toLocaleString("es-AR")+" acabados con precio Skinport · Viendo "+state.provider;
 $("market-empty").hidden=rows.length>0;const next=$("load-more");next.hidden=shown.length>=rows.length;next.textContent="Mostrar más ("+(rows.length-shown.length).toLocaleString("es-AR")+")"}
 
 async function fetchCSFloat(name){
@@ -142,7 +158,17 @@ function compare(x){
  }
  dialog.showModal();document.body.classList.add("modal-open");$("market-dialog-close").focus();
 }
-function init(){const providerBar=$("market-providers");for(const p of MARKETPLACES){const b=mk("span","provider-chip",p.name);providerBar.append(b)}
+function init(){const providerBar=$("market-providers");for(const p of MARKETPLACES){
+ const button=mk("button","provider-chip",p.name);button.type="button";
+ button.setAttribute("aria-pressed",String(p.name===state.provider));
+ button.title="Mostrar opciones de "+p.name;
+ button.addEventListener("click",()=>{
+  state.provider=p.name;state.limit=48;
+  providerBar.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===button)));
+  render();
+ });
+ providerBar.append(button);
+}
 $("skin-search").addEventListener("input",e=>{state.query=e.target.value;state.limit=48;render()});
 $("weapon-filter").addEventListener("change",e=>{state.weapon=e.target.value;state.limit=48;render()});
 $("sort-filter").value="name";$("sort-filter").addEventListener("change",e=>{state.sort=e.target.value;state.limit=48;render()});
