@@ -11,8 +11,8 @@
 <meta property="og:description" content="Explorá skins de CS2 con imágenes, filtros y precios publicados cuando hay datos disponibles.">
 <meta property="og:url" content="https://monkeypluser.github.io/PRUEBAS/skins.html">
 <meta name="twitter:card" content="summary"><meta name="twitter:title" content="FranV6X · Skin Market">
-<link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./skins.css?v=3">
-<script src="./skins.js?v=3" defer></script>
+<link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./skins.css?v=4">
+<script src="./skins.js?v=4" defer></script>
 <title>Skin Market · FranV6X</title>
 </head>
 <body>
@@ -26,7 +26,7 @@
 <section class="market-hero"><div class="container">
 <div class="eyebrow">FRANV6X / ARCHIVO DE COUNTER-STRIKE</div>
 <div class="market-heading"><div><h1>Skin <em>Market.</em></h1><p>Explorá el catálogo, compará acabados y consultá precios publicados. Sin cajas, sin apuestas y sin dinero dentro de esta web.</p></div><div class="market-status"><span class="live-circle"></span><span id="feed-status" role="status" aria-live="polite">Preparando el catálogo…</span></div></div>
-<div class="market-disclaimer">Comparación orientativa de mercados externos. Los precios mostrados solo se publican cuando una fuente autorizada responde correctamente. Nunca significan que una skin sea rentable ni que sea la oferta más barata del mundo.</div>
+<div class="market-disclaimer">Comparación orientativa de mercados externos. La cotización Skinport se actualiza mediante un archivo público generado periódicamente; CSFloat y DMarket se consultan al abrir una skin cuando sus APIs lo permiten. Nunca significan que una skin sea rentable ni que sea la oferta más barata del mundo.</div>
 </div></section>
 <section class="market-body"><div class="container">
 <div class="market-toolbar">
@@ -34,11 +34,11 @@
 <label class="market-field"><span class="sr-only">Tipo de arma</span><select id="weapon-filter" aria-label="Filtrar por arma"><option value="">Todas las armas</option><option>AK-47</option><option>AWP</option><option>M4A1-S</option><option>M4A4</option><option>USP-S</option><option>Glock-18</option><option>Desert Eagle</option><option>Knife</option><option>Gloves</option></select></label>
 <label class="market-field"><span class="sr-only">Orden</span><select id="sort-filter" aria-label="Ordenar resultados"><option value="low">Menor precio disponible en Skinport</option><option value="high">Mayor precio disponible</option><option value="name">Nombre A–Z</option></select></label>
 </div>
-<div class="market-providers" id="market-providers" aria-label="Mercados seleccionados"></div><div class="market-summary"><p id="results-count">Preparando catálogo…</p><button id="refresh-prices" class="btn btn-ghost" type="button">Actualizar precios</button></div>
+<div class="market-providers" id="market-providers" aria-label="Mercados seleccionados"></div><div class="market-summary"><p id="results-count">Preparando catálogo…</p><button id="refresh-prices" class="btn btn-ghost" type="button">Recargar cotizaciones</button></div>
 <div class="market-grid" id="skin-grid" aria-live="off"><div class="market-loading">Cargando skins…</div></div>
 <div id="market-empty" class="market-empty" hidden><p>No encontramos artículos con esos filtros.</p><button class="btn btn-ghost" id="clear-filters" type="button">Limpiar filtros</button></div>
 <dialog id="market-dialog" class="market-dialog" aria-labelledby="market-dialog-title"><div class="market-dialog-head"><div><span class="eyebrow">COMPARAR MERCADOS</span><h2 id="market-dialog-title">Skin</h2></div><button type="button" id="market-dialog-close" aria-label="Cerrar comparación" class="icon-button">×</button></div><p id="market-dialog-context" class="muted"></p><div id="market-offers" class="market-offers"></div><p class="muted" style="font-size:.85rem">Los enlaces abren proveedores externos. Los valores cambian constantemente. Algunos mercados solo permiten consulta manual.</p></dialog><div class="market-pagination"><button id="load-more" type="button" class="btn btn-ghost" hidden>Mostrar más skins</button></div>
-<div class="market-note"><strong>Fuentes:</strong> CSFloat, Skinport y DMarket. Sus APIs pueden limitar las consultas directas desde GitHub Pages; cuando una no responda aparecerá «Consultar». Cuando no exista una cotización verificable vas a ver “Consultar mercado”, nunca un precio inventado. Las imágenes provienen del catálogo comunitario de CS2 y se intentan recuperar de varias fuentes.</div>
+<div class="market-note"><strong>Fuentes:</strong> CSFloat, Skinport y DMarket. CSFloat y DMarket pueden bloquear consultas desde GitHub Pages; cuando una no responda aparecerá «Consultar». Cuando no exista una cotización verificable vas a ver “Consultar mercado”, nunca un precio inventado. Las imágenes provienen del catálogo comunitario de CS2 y se intentan recuperar de varias fuentes.</div>
 </div></section>
 </main>
 <footer class="footer"><div class="container footer-content"><div><div class="brand">FRAN<b>V6X</b></div><p class="legal">Sitio independiente y no afiliado a Valve ni a SkinCash. Counter-Strike y sus objetos pertenecen a sus titulares. Los datos de precios son de terceros, pueden variar y no constituyen asesoramiento financiero. Sin apuestas ni premios.</p></div><div><a href="./index.html">Inicio</a><a href="./index.html#workshop">Workshop</a><a href="https://discord.gg/gtzqGnXJwG" rel="noopener noreferrer" target="_blank">Discord</a></div></div></footer>
