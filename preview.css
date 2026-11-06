@@ -32,3 +32,8 @@
 @media(max-width:800px){.server-card{grid-template-columns:1fr}.server-art{min-height:220px}.premium-webgl{min-height:350px}.premium-webgl .scene-topline{left:15px;right:15px;top:18px;font-size:.55rem}.premium-webgl .scene-controls{right:10px;bottom:12px}.premium-webgl>small{left:15px;bottom:23px;font-size:.57rem}}
 @media(max-width:390px){.premium-webgl .scene-topline span:last-child,.premium-webgl .scene-controls .scene-status{display:none}}
 @media(prefers-reduced-motion:reduce){.metric-skeleton,.map-skeleton{animation:none}.premium-webgl canvas{display:none!important}.premium-webgl .hero-still{opacity:1!important}.premium-webgl .hero-still-logo{transform:none}}
+
+/* Alternative concept: set V6X_CONFIG.sceneConcept = "archive" in config.js. */
+.premium-webgl[data-concept="archive"] .hero-still{background:radial-gradient(ellipse at center,#2c343c 0%,#111922 57%,#090c10 90%)}
+.premium-webgl[data-concept="archive"] .hero-still-grid{opacity:.3;transform:perspective(850px) rotateX(60deg) scale(.85)}
+.premium-webgl[data-concept="archive"] .hero-still-logo{color:#d0c6b5;text-shadow:3px 7px 0 #424952,0 0 46px #8897a544;transform:perspective(1000px) rotateY(8deg)}
