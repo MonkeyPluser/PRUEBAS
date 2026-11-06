@@ -2,6 +2,10 @@ name: Update public CS2 skin prices
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/update-prices.yml"
+      - "scripts/update_prices.py"
   schedule:
     - cron: "17 */6 * * *"
 
