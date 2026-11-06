@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="FranV6X — CS2, Workshop y comunidad">
+<defs><radialGradient id="bg"><stop stop-color="#273037"/><stop offset="1" stop-color="#090c10"/></radialGradient><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0dec1"/><stop offset=".5" stop-color="#d8a764"/><stop offset="1" stop-color="#67533b"/></linearGradient><pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M60 0H0V60" fill="none" stroke="#587086" stroke-opacity=".18"/></pattern></defs>
+<rect width="1200" height="630" fill="url(#bg)"/><rect width="1200" height="630" fill="url(#grid)"/>
+<path d="M90 74H1110M90 556H1110" stroke="#d8a764" stroke-opacity=".45"/>
+<text x="92" y="129" fill="#d8a764" font-family="Arial, sans-serif" font-weight="bold" font-size="24" letter-spacing="6">FRANV6X / ARGENTINA</text>
+<text x="85" y="355" fill="url(#metal)" font-family="Arial, sans-serif" font-size="218" font-weight="900" letter-spacing="-18">V6X</text>
+<text x="90" y="438" fill="#f6f5f2" font-family="Arial, sans-serif" font-size="42" font-weight="bold">El juego es solo el comienzo.</text>
+<text x="91" y="491" fill="#c0ccd6" font-family="Arial, sans-serif" font-size="25">Contenido · Workshop · Comunidad</text>
+<circle cx="985" cy="285" r="170" fill="none" stroke="#d8a764" stroke-opacity=".32" stroke-width="2"/><ellipse cx="985" cy="285" rx="195" ry="83" fill="none" stroke="#d8a764" stroke-opacity=".3" stroke-width="2" transform="rotate(-25 985 285)"/>
+</svg>
