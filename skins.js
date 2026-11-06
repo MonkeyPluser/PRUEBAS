@@ -14,10 +14,29 @@ const mk=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=
 const okayUrl=s=>{try{const u=new URL(s);return u.protocol==="https:"}catch{return false}};
 const clean=s=>String(s||"").toLocaleLowerCase("es-AR");
 function assetUrl(src){if(!okayUrl(src))return null;return src}
-function altSource(url){if(typeof url!=="string")return null;const p="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/";return url.startsWith(p)?"https://cdn.jsdelivr.net/gh/ByMykel/counter-strike-image-tracker@main/"+url.slice(p.length):null}
-function preview(item){const stage=mk("div","market-visual");const fallbackBox=mk("div","fallback-icon","◇");fallbackBox.setAttribute("aria-label","Vista previa no disponible");stage.append(fallbackBox);
- const url=assetUrl(item.image);if(url){const img=mk("img");img.alt="Imagen de "+item.name;img.loading="lazy";img.decoding="async";img.width=280;img.height=180;let retried=false;
- img.onload=()=>fallbackBox.remove();img.onerror=()=>{if(!retried){const backup=altSource(url);if(backup){retried=true;img.src=backup;return}}img.remove()};img.src=url;stage.append(img)}return stage}
+
+function imageVariants(item){
+ const urls=[];
+ const add=u=>{if(okayUrl(u)&&!urls.includes(u))urls.push(u)};
+ const rawBase="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/";
+ const img=item.image;
+ add(img);
+ if(typeof img==="string"&&img.startsWith(rawBase)){
+  const tail=img.slice(rawBase.length).replace(/^refs\/heads\/main\//,"").replace(/^main\//,"");
+  add("https://cdn.jsdelivr.net/gh/ByMykel/counter-strike-image-tracker@main/"+tail);
+  add("https://raw.githack.com/ByMykel/counter-strike-image-tracker/main/"+tail);
+ }
+ return urls;
+}
+function preview(item){
+ const stage=mk("div","market-visual"),placeholder=mk("div","fallback-icon","◇");
+ placeholder.setAttribute("aria-label","Imagen no disponible");stage.append(placeholder);
+ const sources=imageVariants(item);if(!sources.length)return stage;
+ const img=mk("img");img.alt="Skin "+item.name;img.loading="lazy";img.decoding="async";img.width=280;img.height=180;
+ let current=0;img.onload=()=>placeholder.remove();
+ img.onerror=()=>{current++;if(current<sources.length)img.src=sources[current];else img.remove()};
+ img.src=sources[0];stage.append(img);return stage;
+}
 function normalizeSkins(data){if(!Array.isArray(data))throw Error("Catálogo no disponible");const map=new Map();
 for(const x of data){if(!x||typeof x.name!=="string"||!x.name.includes("|")||x.name.length>180)continue;if(!/^(?:[★ ]*)?(?:AK-47|AWP|M4A1-S|M4A4|USP-S|Glock-18|Desert Eagle|FAMAS|Galil AR|MAC-10|MP9|MP7|UMP-45|P90|P250|Five-SeveN|Tec-9|SSG 08|AUG|SG 553|G3SG1|SCAR-20|Nova|XM1014|Sawed-Off|MAG-7|Negev|M249|CZ75-Auto|Dual Berettas|R8 Revolver|PP-Bizon|Zeus x27|Knife|Karambit|Bayonet|Gloves|Hand Wraps|Butterfly Knife|Talon Knife|Skeleton Knife|Kukri Knife|Falchion Knife|Huntsman Knife|Stiletto Knife|Gut Knife|Flip Knife|Shadow Daggers|Navaja Knife|Ursus Knife|Bowie Knife|Paracord Knife|Survival Knife|Classic Knife|Nomad Knife)\s*\|/i.test(x.name))continue;
  const img=assetUrl(x.image);const existing=map.get(x.name);if(!existing||(!existing.image&&img))map.set(x.name,{name:x.name,image:img})}
