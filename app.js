@@ -56,46 +56,33 @@ function initCommunity(){
 function initMenu(){const trigger=$("#menu-toggle"),menu=$("#menu");trigger.addEventListener("click",()=>{const open=menu.classList.toggle("open");trigger.setAttribute("aria-expanded",String(open))});menu.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{menu.classList.remove("open");trigger.setAttribute("aria-expanded","false")}));
  if("IntersectionObserver" in window){const navs=[...menu.querySelectorAll('a[href^="#"]')];const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){navs.forEach(a=>a.removeAttribute("aria-current"));const a=navs.find(n=>n.getAttribute("href")==="#"+e.target.id);if(a)a.setAttribute("aria-current","location")}})},{rootMargin:"-25% 0px -60% 0px"});document.querySelectorAll("main section[id]").forEach(s=>io.observe(s))}}
 function initHero(){
- const region=$("#hero-art"),canvas=$("#hero-canvas");
- // Motion for the dependency-free 3D layer, even if Three.js/WebGL fails.
- let lastMove=0;
+ const region=$("#hero-art"),toggle=$("#motion-toggle");
+ if(!region||!toggle)return;
+ // No external 3D library is needed; the browser animates CSS 3D geometry.
+ // This is visibly rotating by default unless reduced motion is requested.
+ const prefersReduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ const setPaused=paused=>{
+  region.classList.toggle("is-paused",paused);
+  toggle.setAttribute("aria-pressed",String(paused));
+  toggle.setAttribute("aria-label",paused?"Reanudar animación 3D":"Pausar animación 3D");
+  toggle.textContent=paused?"Reanudar movimiento ▶":"Pausar movimiento Ⅱ";
+ };
+ setPaused(prefersReduced);
+ toggle.addEventListener("click",()=>setPaused(!region.classList.contains("is-paused")));
+ let latest=0;
  region.addEventListener("pointermove",event=>{
-  if(event.pointerType==="touch"||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-  const now=performance.now();if(now-lastMove<30)return;lastMove=now;
-  const box=region.getBoundingClientRect();
-  const x=(event.clientX-box.left)/box.width-.5,y=(event.clientY-box.top)/box.height-.5;
-  region.style.setProperty("--hero-x",(-y*12).toFixed(1)+"deg");
-  region.style.setProperty("--hero-y",(x*14).toFixed(1)+"deg");
+  if(event.pointerType==="touch"||prefersReduced)return;
+  const now=performance.now();if(now-latest<30)return;latest=now;
+  const rect=region.getBoundingClientRect();
+  const x=(event.clientX-rect.left)/rect.width-.5;
+  const y=(event.clientY-rect.top)/rect.height-.5;
+  region.style.setProperty("--tilt-x",(-y*13).toFixed(1)+"deg");
+  region.style.setProperty("--tilt-y",(x*17).toFixed(1)+"deg");
  });
  region.addEventListener("pointerleave",()=>{
-  region.style.setProperty("--hero-x","0deg");
-  region.style.setProperty("--hero-y","0deg");
+  region.style.setProperty("--tilt-x","0deg");
+  region.style.setProperty("--tilt-y","0deg");
  });
- if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
- // WebGL is optional: the CSS fallback stays visible when Three.js or WebGL fails.
- import("https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js").then(THREE=>{
- const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:"low-power"});
- renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
- const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(42,1,.1,100);camera.position.z=11;
- scene.add(new THREE.AmbientLight(0xe1e5eb,1.45));
- const key=new THREE.DirectionalLight(0xe3b87a,3.6);key.position.set(-2,3,6);scene.add(key);
- const fill=new THREE.DirectionalLight(0x7c9dbd,2.7);fill.position.set(3,-3,3);scene.add(fill);
- const group=new THREE.Group();scene.add(group);
- const metal=new THREE.MeshStandardMaterial({color:0xb8c2c9,metalness:.9,roughness:.22,side:THREE.DoubleSide});
- const handle=new THREE.MeshStandardMaterial({color:0x222932,metalness:.4,roughness:.48});
- const gold=new THREE.MeshStandardMaterial({color:0xb9915d,metalness:.8,roughness:.3});
- const shape=new THREE.Shape();[[-3.6,.1],[-2.7,.5],[-.65,.52],[-.35,.25],[-.35,-.25],[-2.7,-.4]].forEach((p,i)=>i?shape.lineTo(...p):shape.moveTo(...p));shape.closePath();
- group.add(new THREE.Mesh(new THREE.ExtrudeGeometry(shape,{depth:.12,bevelEnabled:true,bevelThickness:.035,bevelSize:.035,bevelSegments:2}),metal));
- const grip=new THREE.Mesh(new THREE.BoxGeometry(2.65,.59,.3),handle);grip.position.x=1.05;group.add(grip);
- const guard=new THREE.Mesh(new THREE.BoxGeometry(.18,1,.38),gold);guard.position.x=-.31;group.add(guard);
- for(let i=0;i<6;i++){const line=new THREE.Mesh(new THREE.BoxGeometry(.045,.61,.33),gold);line.position.x=.08+i*.36;group.add(line)}
- const ring=new THREE.Mesh(new THREE.TorusGeometry(.29,.08,10,30),gold);ring.position.x=2.57;group.add(ring);
- const pointer={x:0,y:0};region.addEventListener("pointermove",e=>{if(e.pointerType==="touch")return;const r=region.getBoundingClientRect();pointer.x=((e.clientX-r.left)/r.width-.5)*2;pointer.y=((e.clientY-r.top)/r.height-.5)*2});region.addEventListener("pointerleave",()=>{pointer.x=0;pointer.y=0});
- const resize=()=>{const r=region.getBoundingClientRect();if(r.width<1||r.height<1)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.position.z=r.width<430?14:11;camera.updateProjectionMatrix()};resize();
- const ro=new ResizeObserver(resize);ro.observe(region);region.classList.add("is-3d");
- let visible=true;const io=new IntersectionObserver(v=>visible=v[0].isIntersecting);io.observe(region);
- let last=0;function frame(time){requestAnimationFrame(frame);if(!visible||document.hidden||time-last<33)return;last=time;group.rotation.y+=(pointer.x*.34-group.rotation.y)*.055;group.rotation.x+=(-pointer.y*.2-group.rotation.x)*.055;group.rotation.z=-.18+Math.sin(time*.0006)*.045;renderer.render(scene,camera)}requestAnimationFrame(frame)
- }).catch(()=>{region.classList.remove("is-3d")});
 }
 function init(){renderMetrics();initMaps();initClips();initCommunity();initMenu();initHero();}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
