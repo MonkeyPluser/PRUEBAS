@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#090c10">
-<meta name="description" content="FranV6X Skin Market: catálogo de skins de Counter-Strike 2, búsqueda, filtros y precios mínimos publicados en SkinCash, cuando estén disponibles.">
+<meta name="description" content="FranV6X Skin Market: catálogo de skins de Counter-Strike 2, búsqueda, filtros y precios verificados de los mercados seleccionados, cuando estén disponibles.">
 <link rel="canonical" href="https://monkeypluser.github.io/PRUEBAS/skins.html">
 <link rel="icon" type="image/svg+xml" href="./favicon.svg">
 <meta property="og:type" content="website"><meta property="og:locale" content="es_AR">
@@ -25,20 +25,20 @@
 <main id="catalogo">
 <section class="market-hero"><div class="container">
 <div class="eyebrow">FRANV6X / ARCHIVO DE COUNTER-STRIKE</div>
-<div class="market-heading"><div><h1>Skin <em>Market.</em></h1><p>Explorá el catálogo, compará acabados y consultá precios publicados. Sin cajas, sin apuestas y sin dinero dentro de esta web.</p></div><div class="market-status"><span class="live-circle"></span><span id="feed-status" role="status" aria-live="polite">Conectando con el catálogo…</span></div></div>
-<div class="market-disclaimer">Los valores son precios mínimos publicados por <strong>SkinCash</strong> en USD para cada artículo y desgaste, no precios universales ni recomendaciones financieras. Pueden cambiar y no incluyen necesariamente todas las ofertas del mercado.</div>
+<div class="market-heading"><div><h1>Skin <em>Market.</em></h1><p>Explorá el catálogo, compará acabados y consultá precios publicados. Sin cajas, sin apuestas y sin dinero dentro de esta web.</p></div><div class="market-status"><span class="live-circle"></span><span id="feed-status" role="status" aria-live="polite">Preparando el catálogo…</span></div></div>
+<div class="market-disclaimer">Comparación orientativa de mercados externos. Los precios mostrados solo se publican cuando una fuente autorizada responde correctamente. Nunca significan que una skin sea rentable ni que sea la oferta más barata del mundo.</div>
 </div></section>
 <section class="market-body"><div class="container">
 <div class="market-toolbar">
 <label class="market-search"><span class="sr-only">Buscar skins</span><input id="skin-search" type="search" placeholder="Buscar arma, skin o acabado…" autocomplete="off" aria-label="Buscar skins"></label>
 <label class="market-field"><span class="sr-only">Tipo de arma</span><select id="weapon-filter" aria-label="Filtrar por arma"><option value="">Todas las armas</option><option>AK-47</option><option>AWP</option><option>M4A1-S</option><option>M4A4</option><option>USP-S</option><option>Glock-18</option><option>Desert Eagle</option><option>Knife</option><option>Gloves</option></select></label>
-<label class="market-field"><span class="sr-only">Orden</span><select id="sort-filter" aria-label="Ordenar resultados"><option value="low">Menor precio disponible</option><option value="high">Mayor precio disponible</option><option value="name">Nombre A–Z</option></select></label>
+<label class="market-field"><span class="sr-only">Orden</span><select id="sort-filter" aria-label="Ordenar resultados"><option value="low">Menor precio verificado</option><option value="high">Mayor precio disponible</option><option value="name">Nombre A–Z</option></select></label>
 </div>
-<div class="market-summary"><p id="results-count">Preparando catálogo…</p><button id="refresh-prices" class="btn btn-ghost" type="button">Actualizar precios</button></div>
+<div class="market-providers" id="market-providers" aria-label="Mercados seleccionados"></div><div class="market-summary"><p id="results-count">Preparando catálogo…</p><button id="refresh-prices" class="btn btn-ghost" type="button">Actualizar precios</button></div>
 <div class="market-grid" id="skin-grid" aria-live="off"><div class="market-loading">Cargando skins…</div></div>
 <div id="market-empty" class="market-empty" hidden><p>No encontramos artículos con esos filtros.</p><button class="btn btn-ghost" id="clear-filters" type="button">Limpiar filtros</button></div>
-<div class="market-pagination"><button id="load-more" type="button" class="btn btn-ghost" hidden>Mostrar más skins</button></div>
-<div class="market-note"><strong>Información sobre precios:</strong> cada variante (Factory New, Field-Tested, StatTrak™, etc.) puede tener su propio precio. Si la fuente no responde, los precios aparecen como «No disponible»; nunca como $0. El enlace «Consultar en Steam» permite buscar el artículo en el mercado oficial.</div>
+<dialog id="market-dialog" class="market-dialog" aria-labelledby="market-dialog-title"><div class="market-dialog-head"><div><span class="eyebrow">COMPARAR MERCADOS</span><h2 id="market-dialog-title">Skin</h2></div><button type="button" id="market-dialog-close" aria-label="Cerrar comparación" class="icon-button">×</button></div><p id="market-dialog-context" class="muted"></p><div id="market-offers" class="market-offers"></div><p class="muted" style="font-size:.85rem">Los enlaces abren proveedores externos. Los valores cambian constantemente. Algunos mercados solo permiten consulta manual.</p></dialog><div class="market-pagination"><button id="load-more" type="button" class="btn btn-ghost" hidden>Mostrar más skins</button></div>
+<div class="market-note"><strong>Fuentes:</strong> Steam, CSFloat, CS.Money, DMarket, HaloSkins, Skinflow, BUFF Market, SkinsMonkey, Skinport, White Market y Waxpeer. No todas ofrecen una API pública accesible desde GitHub Pages. Cuando no exista una cotización verificable vas a ver “Consultar mercado”, nunca un precio inventado. Las imágenes provienen de un catálogo público independiente de CS2.</div>
 </div></section>
 </main>
 <footer class="footer"><div class="container footer-content"><div><div class="brand">FRAN<b>V6X</b></div><p class="legal">Sitio independiente y no afiliado a Valve ni a SkinCash. Counter-Strike y sus objetos pertenecen a sus titulares. Los datos de precios son de terceros, pueden variar y no constituyen asesoramiento financiero. Sin apuestas ni premios.</p></div><div><a href="./index.html">Inicio</a><a href="./index.html#workshop">Workshop</a><a href="https://discord.gg/gtzqGnXJwG" rel="noopener noreferrer" target="_blank">Discord</a></div></div></footer>
