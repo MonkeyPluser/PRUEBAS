@@ -19,7 +19,7 @@ window.FRAN_DATA={
  {"name":"5e_aimhub_legecy","author":"7ychu5 / 5EPlay","category":"Aim","difficulty":"Todos los niveles","description":"Hub de ejercicios de puntería.","steamId":"3698358490","image":null,"reference":true},
  {"name":"Procedurally Generated Training Map","author":"OrelStealth","category":"Aim","difficulty":"Avanzado","description":"Escenarios variables generados para entrenar.","steamId":"3808451248","image":null,"reference":true},
  {"name":"Mattiak Aim Trainer","author":"iLoveShotgun","category":"Aim","difficulty":"Todos los niveles","description":"Entrenamiento de precisión y reacción.","steamId":"3815529428","image":null,"reference":true}
- ]
+ ],
  /* TODO: links exactos de 3 a 6 clips destacados. */
  clips:[],
  collaborations:[{name:"Hit Gaming",note:"Colaboración realizada; resultado cuantitativo pendiente."}],
