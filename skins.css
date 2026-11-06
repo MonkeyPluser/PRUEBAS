@@ -19,3 +19,10 @@
 .verified-quote{font-size:1rem;color:#85d9ab;font-weight:850;letter-spacing:-.025em}
 .missing-quote{font-size:.86rem;color:#9caab9}
 @media(max-width:550px){.market-dialog{padding:17px}.offer-row{grid-template-columns:1fr auto;gap:4px 10px;padding:10px}.offer-row .btn{grid-column:2;grid-row:1/span 2}.verified-quote,.missing-quote{grid-column:1}.market-providers{flex-wrap:nowrap;overflow-x:auto;padding-bottom:12px}}
+
+/* Active provider is a functional filter, never a decorative label. */
+.provider-chip{cursor:pointer;font:inherit;min-height:44px}
+.provider-chip[aria-pressed="true"]{background:#d8a764;color:#15110c;border-color:#d8a764;font-weight:850}
+.skin-card-actions{display:flex;flex-direction:column;gap:0;margin-top:10px}
+.skin-card-actions .market-action{min-height:44px;margin:0;text-align:left;justify-content:flex-start}
+.skin-card-actions .market-action+ .market-action{border-top:1px solid #343d47}
