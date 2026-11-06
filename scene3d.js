@@ -2,7 +2,11 @@
  * Three.js pinned: r160. No Counter-Strike/Valve assets used.
  * Progressive enhancement: static CSS fallback remains until renderer succeeds.
  */
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
+// Load Three.js lazily with a second CDN only if the first is unavailable.
+async function loadThree(){
+ try{return await import("https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js")}
+ catch(primaryError){return await import("https://unpkg.com/three@0.160.1/build/three.module.js")}
+}
 
 export async function mountScene(config=window.V6X_CONFIG){
  const host=document.getElementById("hero-art"),canvas=document.getElementById("hero-canvas");
@@ -12,9 +16,13 @@ export async function mountScene(config=window.V6X_CONFIG){
  const cores=navigator.hardwareConcurrency||4;
  const memory=navigator.deviceMemory||4;
  const saveData=navigator.connection?.saveData===true;
- if(reduced||saveData||cores<=2||memory<=2)return; // quality fallback, no heavy GPU
+ if(reduced||saveData||cores<=2||memory<=2){host.dataset.sceneStatus="fallback";return} // quality fallback
  try{if(typeof navigator.getBattery==="function"){const battery=await navigator.getBattery();if(!battery.charging&&battery.level<.18)return}}catch{} // API not supported on most devices
- if(!canvas.getContext("webgl2")&&!canvas.getContext("webgl"))return;
+ // Do not request WebGL1 on the live canvas: Three.js needs to create its own WebGL2 context.
+ const probe=document.createElement("canvas");
+ if(!probe.getContext("webgl2")){host.dataset.sceneStatus="no-webgl2";return}
+ let THREE;
+ try{THREE=await loadThree()}catch(error){host.dataset.sceneStatus="cdn-unavailable";console.warn("V6X Three.js CDN falló",error);return}
  let renderer,scene,camera,group,resizeObserver,observer,raf=0,visible=true,disposed=false;
  const geometry=[],materials=[],pointer={x:0,y:0},gyro={x:0,y:0};
  try{
@@ -96,11 +104,11 @@ export async function mountScene(config=window.V6X_CONFIG){
    dust.rotation.y=t*.006;
    renderer.render(scene,camera);
   }
-  renderer.render(scene,camera);host.classList.add("webgl-ready");raf=requestAnimationFrame(frame);
+  renderer.render(scene,camera);host.classList.add("webgl-ready");host.dataset.sceneStatus="active";raf=requestAnimationFrame(frame);
   const dispose=()=>{disposed=true;cancelAnimationFrame(raf);observer?.disconnect();resizeObserver?.disconnect();host.removeEventListener("pointermove",onMove);host.removeEventListener("pointerleave",onLeave);window.removeEventListener("deviceorientation",onOrientation);geometry.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());renderer.dispose()};
   window.addEventListener("pagehide",dispose,{once:true});
  }catch(error){
   console.warn("V6X 3D no disponible: se mantiene la imagen CSS.",error);
-  host.classList.remove("webgl-ready");try{renderer?.dispose()}catch{}
+  host.classList.remove("webgl-ready");host.dataset.sceneStatus="render-error";try{renderer?.dispose()}catch{}
  }
 }
