@@ -7,7 +7,7 @@ window.FRAN_DATA={
  {label:"Instagram",value:3635,display:"3,6K+"},
  {label:"Discord",value:4252,display:"4,2K+"}]},
  social:{tiktok:"https://www.tiktok.com/@franv6x",instagram:"https://www.instagram.com/franv6x/",kick:"https://kick.com/franv6x",youtube:"https://www.youtube.com/@franv6x",discord:"https://discord.gg/gtzqGnXJwG"},
- contact:{email:null /* TODO: correo comercial verificado */,mediaKit:null /* TODO: URL pública del media kit */},
+ contact:{email:"franv6x.contacto@gmail.com",mediaKit:null /* TODO: URL pública del media kit */},
  /* Mapas seleccionados por FranV6X. Se atribuye su autoría original; no implica que FranV6X los haya creado. */
  maps:[
  {"name":"Aim_Rush / Aim training map","author":"JoeyyBiden$$","category":"Aim","difficulty":"Todos los niveles","description":"Rutina de aim y reacción contra bots.","steamId":"3105821815","image":"https://images.steamusercontent.com/ugc/2277195874855926969/9C5C0B7EA72C5D6A32BA6425C7B302CBC71570E4/","reference":true},
