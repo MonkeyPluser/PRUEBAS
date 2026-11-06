@@ -45,48 +45,6 @@ function initCommunity(){
 }
 function initMenu(){const trigger=$("#menu-toggle"),menu=$("#menu");trigger.addEventListener("click",()=>{const open=menu.classList.toggle("open");trigger.setAttribute("aria-expanded",String(open))});menu.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{menu.classList.remove("open");trigger.setAttribute("aria-expanded","false")}));
  if("IntersectionObserver" in window){const navs=[...menu.querySelectorAll('a[href^="#"]')];const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){navs.forEach(a=>a.removeAttribute("aria-current"));const a=navs.find(n=>n.getAttribute("href")==="#"+e.target.id);if(a)a.setAttribute("aria-current","location")}})},{rootMargin:"-25% 0px -60% 0px"});document.querySelectorAll("main section[id]").forEach(s=>io.observe(s))}}
-const fallbackCases=config.cases.map((c,i)=>({id:"local-"+i,name:c.name,year:c.year,image:null,items:c.items.map(name=>({name,image:null,rarity:"#a98dd4"}))}));
-let cases=fallbackCases,currentCase=null,previousFocus=null;
-function normalizeApi(raw){
- if(!Array.isArray(raw))throw Error("Formato de catálogo no compatible");
- const result=[];
- for(const entry of raw){if(!entry||typeof entry!=="object"||typeof entry.name!=="string"||!entry.name.endsWith("Case"))continue;
- const items=Array.isArray(entry.contains)?entry.contains.slice(0,50).filter(x=>x&&typeof x.name==="string").map(x=>({name:x.name.slice(0,110),image:typeof x.image==="string"&&/^https:\/\//.test(x.image)?x.image:null,rarity:typeof x.rarity?.color==="string"&&/^#[\da-fA-F]{6}$/.test(x.rarity.color)?x.rarity.color:"#a98dd4"})):[];
- if(!items.length)continue;
- result.push({id:String(entry.id||entry.name),name:entry.name.slice(0,100),year:0,image:typeof entry.image==="string"&&/^https:\/\//.test(entry.image)?entry.image:null,items})}
- if(!result.length)throw Error("No se encontraron cajas válidas");return result
-}
-async function loadCases(){
- const label=$("#catalog-status");status(label,"Cargando imágenes del catálogo…");
- $("#case-grid").replaceChildren(...Array.from({length:8},()=>el("div","skeleton")));
- const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),5500);
- try{const res=await fetch("https://bymykel.github.io/CSGO-API/api/en/crates.json",{signal:ctl.signal,cache:"force-cache"});if(!res.ok)throw Error("HTTP "+res.status);const parsed=normalizeApi(await res.json());cases=parsed;status(label,"Catálogo visual cargado. Aperturas gratuitas simuladas, sin premios reales.")}
- catch(err){cases=fallbackCases;status(label,"No pudimos cargar las imágenes externas. Mostramos el catálogo de respaldo. Podés reintentar.")}
- finally{clearTimeout(timer);renderCases()}
-}
-function renderCases(){
- const root=$("#case-grid");root.replaceChildren();$("#case-count").textContent=cases.length+" cajas disponibles";
- for(const c of cases){const btn=el("button","case-button");btn.type="button";btn.setAttribute("aria-label","Explorar "+c.name);const art=el("div","card-image object");art.append(c.image?image(c.image,c.name):placeholder());btn.append(art,el("span","case-name",c.name));btn.addEventListener("click",()=>openCase(c));root.append(btn)}
-}
-function safeRarity(raw){return /^#[\da-fA-F]{6}$/.test(raw||"")?raw:"#a98dd4"}
-function makeSkinTile(item){const card=el("div","skin-tile");card.style.setProperty("--rarity",safeRarity(item.rarity));const media=el("div","card-image object");media.style.height="105px";media.append(item.image?image(item.image,item.name):placeholder());card.append(media,el("b","",item.name));return card}
-function openCase(c){currentCase=c;previousFocus=document.activeElement;$("#dialog-title").textContent=c.name;const list=$("#skin-list");list.replaceChildren();c.items.forEach(item=>list.append(makeSkinTile(item)));$("#roulette-track").replaceChildren();$("#opening-result").textContent="";$("#open-case").disabled=false;$("#case-dialog").showModal();document.body.classList.add("modal-open");$("#close-dialog").focus()}
-function closeDialog(){const dlg=$("#case-dialog");if(dlg.open)dlg.close();document.body.classList.remove("modal-open");previousFocus?.focus()}
-function initDialog(){const dlg=$("#case-dialog");$("#close-dialog").addEventListener("click",closeDialog);dlg.addEventListener("close",()=>{document.body.classList.remove("modal-open");previousFocus?.focus()});dlg.addEventListener("click",e=>{if(e.target===dlg)closeDialog()});$("#open-case").addEventListener("click",rollCase)}
-let rolling=false;
-function rollCase(){
- if(!currentCase||rolling||!currentCase.items.length)return;rolling=true;
- const b=$("#open-case"),track=$("#roulette-track"),result=$("#opening-result");
- b.disabled=true;result.textContent="Apertura en curso…";track.replaceChildren();
- const pool=currentCase.items;const chosen=pool[Math.floor(Math.random()*pool.length)];
- const sequence=Array.from({length:35},(_,i)=>i===30?chosen:pool[Math.floor(Math.random()*pool.length)]);
- sequence.forEach(item=>{const card=el("div","roulette-card");card.style.setProperty("--rarity",safeRarity(item.rarity));if(item.image)card.append(image(item.image,item.name));card.append(el("span","",item.name));track.append(card)});
- const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
- const finish=()=>{result.textContent="Resultado simulado: "+chosen.name+". No tiene valor económico ni puede retirarse.";b.disabled=false;rolling=false};
- if(reduce){finish();return}
- track.style.transition="none";track.style.transform="translateX(0px)";
- requestAnimationFrame(()=>requestAnimationFrame(()=>{const item=track.firstElementChild;if(!item){finish();return}const step=item.getBoundingClientRect().width+8;const offset=30*step+step/2-$("#roulette").clientWidth/2;track.style.transition="transform 4.5s cubic-bezier(.12,.76,.14,1)";track.style.transform="translateX(-"+Math.max(0,offset)+"px)";setTimeout(finish,4650)}));
-}
 function initHero(){
  const region=$("#hero-art"),canvas=$("#hero-canvas");
  if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
@@ -115,6 +73,6 @@ function initHero(){
  let last=0;function frame(time){requestAnimationFrame(frame);if(!visible||document.hidden||time-last<33)return;last=time;group.rotation.y+=(pointer.x*.34-group.rotation.y)*.055;group.rotation.x+=(-pointer.y*.2-group.rotation.x)*.055;group.rotation.z=-.18+Math.sin(time*.0006)*.045;renderer.render(scene,camera)}requestAnimationFrame(frame)
  }).catch(()=>{region.classList.remove("is-3d")});
 }
-function init(){renderMetrics();initMaps();initClips();initCommunity();initMenu();initDialog();renderCases();loadCases();$("#retry-catalog").addEventListener("click",loadCases);initHero();}
+function init(){renderMetrics();initMaps();initClips();initCommunity();initMenu();initHero();}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
