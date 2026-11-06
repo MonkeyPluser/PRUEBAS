@@ -11,8 +11,18 @@ function placeholder(){const wrap=el("span");wrap.setAttribute("aria-hidden","tr
 const status=(target,msg)=>{target.textContent=msg};
 function renderMetrics(){
  const grid=$("#metrics-grid");grid.replaceChildren();
- for(const m of config.metrics.items){const card=el("article","metric"+(m.featured?" featured":""));const number=el("strong","metric-number",m.display);number.dataset.value=m.value;number.dataset.display=m.display;card.append(number,el("span","",m.label));grid.append(card)}
- $("#metrics-date").textContent="Actualización: "+config.metrics.updated+". "+config.metrics.context;
+ const map={TikTok:"tiktok",Instagram:"instagram",Discord:"discord",YouTube:"youtube",Kick:"kick"};
+ for(const m of config.metrics.items){
+  const key=map[m.label];
+  const url=key?config.social[key]:null;
+  const card=el(url?"a":"article","metric"+(m.featured?" featured":""));
+  if(url){card.href=url;card.target="_blank";card.rel="noopener noreferrer";card.setAttribute("aria-label","Abrir "+m.label+" en su plataforma; cifra histórica, no en tiempo real")}
+  const number=el("strong","metric-number",m.display);number.dataset.value=m.value;number.dataset.display=m.display;
+  card.append(number,el("span","",m.label));
+  if(url)card.append(el("span","metric-open","Ver perfil ↗"));
+  grid.append(card);
+ }
+ $("#metrics-date").textContent="Datos históricos actualizados: "+config.metrics.updated+". "+config.metrics.context+" Seguí los enlaces para consultar los perfiles públicos.";
  const values=[...document.querySelectorAll(".metric-number")];
  if(!("IntersectionObserver" in window)||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(!e.isIntersecting)return;obs.unobserve(e.target);const n=e.target,end=Number(n.dataset.value),goal=n.dataset.display;const start=performance.now();function tick(now){const t=Math.min((now-start)/1100,1),v=Math.floor(end*(1-Math.pow(1-t,3)));n.textContent=end>=100000?(v/1000).toLocaleString("es-AR",{maximumFractionDigits:0})+"K+":end>=1000?(v/1000).toLocaleString("es-AR",{maximumFractionDigits:1})+"K+":String(v);if(t<1)requestAnimationFrame(tick);else n.textContent=goal}requestAnimationFrame(tick)})},{threshold:.4});values.forEach(n=>obs.observe(n));
@@ -47,6 +57,20 @@ function initMenu(){const trigger=$("#menu-toggle"),menu=$("#menu");trigger.addE
  if("IntersectionObserver" in window){const navs=[...menu.querySelectorAll('a[href^="#"]')];const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){navs.forEach(a=>a.removeAttribute("aria-current"));const a=navs.find(n=>n.getAttribute("href")==="#"+e.target.id);if(a)a.setAttribute("aria-current","location")}})},{rootMargin:"-25% 0px -60% 0px"});document.querySelectorAll("main section[id]").forEach(s=>io.observe(s))}}
 function initHero(){
  const region=$("#hero-art"),canvas=$("#hero-canvas");
+ // Motion for the dependency-free 3D layer, even if Three.js/WebGL fails.
+ let lastMove=0;
+ region.addEventListener("pointermove",event=>{
+  if(event.pointerType==="touch"||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const now=performance.now();if(now-lastMove<30)return;lastMove=now;
+  const box=region.getBoundingClientRect();
+  const x=(event.clientX-box.left)/box.width-.5,y=(event.clientY-box.top)/box.height-.5;
+  region.style.setProperty("--hero-x",(-y*12).toFixed(1)+"deg");
+  region.style.setProperty("--hero-y",(x*14).toFixed(1)+"deg");
+ });
+ region.addEventListener("pointerleave",()=>{
+  region.style.setProperty("--hero-x","0deg");
+  region.style.setProperty("--hero-y","0deg");
+ });
  if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
  // WebGL is optional: the CSS fallback stays visible when Three.js or WebGL fails.
  import("https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js").then(THREE=>{
