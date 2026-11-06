@@ -134,8 +134,22 @@ function initServer(){
 function initHero(){
  const region=$("#hero-art"),toggle=$("#motion-toggle");
  if(region?.classList.contains("premium-webgl")){
-  if("requestIdleCallback" in window)requestIdleCallback(()=>import("./scene3d.js").then(x=>x.mountScene(window.V6X_CONFIG)).catch(()=>{}),{timeout:1500});
-  else setTimeout(()=>import("./scene3d.js").then(x=>x.mountScene(window.V6X_CONFIG)).catch(()=>{}),300);
+  const status=$("#scene-status");
+  // Keep fallback animated; do not silently swallow module or rendering errors.
+  const updateStatus=()=>{
+   if(!status)return;
+   const state=region.dataset.sceneStatus;
+   if(state==="active")status.textContent="3D EN VIVO";
+   else if(state==="fallback"||state==="no-webgl2")status.textContent="VISUALIZACIÓN LIGERA";
+   else if(state==="cdn-unavailable"||state==="render-error"||state==="module-error")status.textContent="MODO COMPATIBLE";
+  };
+  const observer=new MutationObserver(updateStatus);observer.observe(region,{attributes:true,attributeFilter:["data-scene-status"]});
+  const load=()=>import("./scene3d.js?v=fix6").then(x=>x.mountScene(window.V6X_CONFIG)).catch(error=>{
+   console.warn("FranV6X: módulo 3D no disponible",error);
+   region.dataset.sceneStatus="module-error";
+  });
+  if("requestIdleCallback" in window)requestIdleCallback(load,{timeout:650});
+  else setTimeout(load,100);
   return;
  }
  if(!region||!toggle)return;
