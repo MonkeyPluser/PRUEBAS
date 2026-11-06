@@ -165,6 +165,25 @@ function initHero(){
   region.style.setProperty("--tilt-y","0deg");
  });
 }
-function init(){renderMetrics();initMaps();initClips();initCommunity();initMenu();initServer();initHero();}
+function safeInit(rootSelector,fn){
+ try{fn()}catch(error){
+  console.warn("FranV6X: error de sección, se muestra respaldo.",error);
+  const root=$(rootSelector);if(!root)return;
+  root.replaceChildren();
+  const box=el("div","empty");box.append(el("p","","No pudimos mostrar esta sección. Probá nuevamente."));
+  const retry=el("button","btn btn-ghost","Reintentar");retry.type="button";retry.addEventListener("click",()=>safeInit(rootSelector,fn));
+  box.append(retry);root.append(box);
+ }
+}
+function init(){
+ safeInit("#metrics-grid",renderMetrics);
+ safeInit("#map-grid",initMaps);
+ safeInit("#clips-grid",initClips);
+ safeInit("#social-links",initCommunity);
+ safeInit("#menu",initMenu);
+ safeInit("#servidor",initServer);
+ safeInit("#hero-art",initHero);
+}
+
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
