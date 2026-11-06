@@ -106,9 +106,13 @@ function skinCard(x){
  compareButton.type="button";compareButton.addEventListener("click",()=>compare(x));
  actions.append(action,compareButton);body.append(actions);card.append(body);return card;
 }
-function render(){const rows=visibleRows(),shown=rows.slice(0,state.limit),root=$("skin-grid"),frag=document.createDocumentFragment();
+function render(){
+ const hasPrices=state.provider==="Skinport"&&state.offers.size>0;
+ for(const option of $("sort-filter").options){if(option.value==="low"||option.value==="high")option.disabled=!hasPrices}
+ if(!hasPrices&&state.sort!=="name"){state.sort="name";$("sort-filter").value="name"}
+ const rows=visibleRows(),shown=rows.slice(0,state.limit),root=$("skin-grid"),frag=document.createDocumentFragment();
 for(const x of shown)frag.append(skinCard(x));root.replaceChildren(frag);
-$("results-count").textContent=rows.length.toLocaleString("es-AR")+" skins · "+state.offers.size.toLocaleString("es-AR")+" acabados con precio Skinport · Viendo "+state.provider;
+$("results-count").textContent=rows.length.toLocaleString("es-AR")+" skins · "+state.offers.size.toLocaleString("es-AR")+" acabados con precio Skinport · Mercado: "+state.provider;
 $("market-empty").hidden=rows.length>0;const next=$("load-more");next.hidden=shown.length>=rows.length;next.textContent="Mostrar más ("+(rows.length-shown.length).toLocaleString("es-AR")+")"}
 
 async function fetchCSFloat(name){
