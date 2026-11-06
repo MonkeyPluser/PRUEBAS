@@ -37,3 +37,23 @@
 .premium-webgl[data-concept="archive"] .hero-still{background:radial-gradient(ellipse at center,#2c343c 0%,#111922 57%,#090c10 90%)}
 .premium-webgl[data-concept="archive"] .hero-still-grid{opacity:.3;transform:perspective(850px) rotateX(60deg) scale(.85)}
 .premium-webgl[data-concept="archive"] .hero-still-logo{color:#d0c6b5;text-shadow:3px 7px 0 #424952,0 0 46px #8897a544;transform:perspective(1000px) rotateY(8deg)}
+
+/* Animated fallback when WebGL cannot initialize. Always preserve motion accessibility. */
+@keyframes v6x-fallback-depth{
+  0%,100%{transform:perspective(1000px) rotateY(-18deg) rotateX(4deg) translateY(0)}
+  50%{transform:perspective(1000px) rotateY(18deg) rotateX(-3deg) translateY(-14px)}
+}
+@keyframes v6x-grid-flow{
+  0%{background-position:0 0}
+  100%{background-position:70px 70px}
+}
+.premium-webgl:not(.webgl-ready) .hero-still-logo{
+  animation:v6x-fallback-depth 9s ease-in-out infinite;
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+.premium-webgl:not(.webgl-ready) .hero-still-grid{animation:v6x-grid-flow 14s linear infinite}
+.premium-webgl .scene-status{font-size:.68rem;letter-spacing:.08em}
+@media(prefers-reduced-motion:reduce){
+ .premium-webgl .hero-still-logo,.premium-webgl .hero-still-grid{animation:none!important}
+}
