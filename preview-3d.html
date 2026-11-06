@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#090c10">
 <meta name="description" content="FranV6X: creador argentino de Counter-Strike 2. Mapas de Workshop, entrenamiento, videos, torneos y comunidad.">
-<meta name="robots" content="index,follow">
 <link rel="canonical" href="https://monkeypluser.github.io/PRUEBAS/">
+<!-- DRAFT: keep noindex. Launch: remove this tag; update title, canonical, sitemap.xml and robots.txt. -->
 <meta name="robots" content="noindex,follow">
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
@@ -15,13 +15,18 @@
 <meta property="og:description" content="Entrenamiento, mapas, contenido y comunidad de Counter-Strike 2 en Argentina.">
 <meta property="og:url" content="https://monkeypluser.github.io/PRUEBAS/">
 <!-- TODO: subir imagen real 1200x630 a og-cover.png y activar og:image y twitter:image. -->
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="https://monkeypluser.github.io/PRUEBAS/og-draft.svg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://monkeypluser.github.io/PRUEBAS/og-draft.svg">
 <meta name="twitter:title" content="FranV6X | Creator Universe">
 <meta name="twitter:description" content="Counter-Strike 2, Workshop y comunidad en Argentina.">
-<link rel="stylesheet" href="./styles.css?v=motion20261106">
+<link rel="stylesheet" href="./styles.css?v=premium5">
+<link rel="stylesheet" href="./preview.css?v=premium5">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"FranV6X","url":"https://monkeypluser.github.io/PRUEBAS/","description":"Creador de contenido argentino de Counter-Strike 2","sameAs":["https://www.tiktok.com/@franv6x","https://www.instagram.com/franv6x/","https://kick.com/franv6x","https://www.youtube.com/@franv6x"]}</script>
+<script defer src="./config.js?v=premium5"></script>
 <script defer src="./data.js?v=motion20261106"></script>
-<script defer src="./app.js?v=motion20261106"></script>
+<script defer src="./app.js?v=premium5"></script>
 <title>FranV6X | Portada 3D — revisión visual</title>
 </head>
 <body>
@@ -31,30 +36,20 @@
   <a href="#inicio" class="brand" aria-label="FranV6X, ir al inicio">FRAN<b>V6X</b></a>
   <button id="menu-toggle" class="menu-toggle" type="button" aria-controls="menu" aria-expanded="false">Menú ☰</button>
   <nav id="menu" class="menu" aria-label="Navegación principal">
-   <a href="#workshop">Workshop</a><a href="#contenido">Contenido</a><a href="#comunidad">Comunidad</a><a href="#colaboraciones">Colaboraciones</a><a href="./skins.html">Mercado de skins</a>
+   <a href="#workshop">Workshop</a><a href="#contenido">Contenido</a><a href="#comunidad">Comunidad</a><a href="#servidor">Servidor V6X</a><a href="#colaboraciones">Colaboraciones</a><a href="./skins.html">Mercado de skins</a>
   </nav>
   <a href="#colaboraciones" class="btn btn-primary header-cta">Trabajemos juntos</a>
  </div>
 </header>
 <main id="principal">
  <section id="inicio" class="hero" aria-labelledby="hero-title">
-  <div class="hero-art" id="hero-art" aria-label="Escultura geométrica tridimensional de la identidad V6X con movimiento">
- <div class="hero-fallback hero-sculpture" aria-hidden="true">
-  <div class="scene-depth">
-   <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-   <div class="sculpture-core">
-    <div class="sculpture-face sculpture-front"><span>V6X</span></div>
-    <div class="sculpture-face sculpture-back"><span>V6X</span></div>
-    <div class="sculpture-face sculpture-edge sculpture-right"></div>
-    <div class="sculpture-face sculpture-edge sculpture-left"></div>
-    <div class="sculpture-face sculpture-edge sculpture-top"></div>
-    <div class="sculpture-face sculpture-edge sculpture-bottom"></div>
-   </div>
-  </div><div class="scene-spot"></div>
- </div>
- <canvas id="hero-canvas" aria-hidden="true"></canvas>
- <div class="hero-visual-caption" aria-hidden="true"><span>V6X / CREATOR UNIVERSE</span><span>3D / INTERACTIVO</span></div>
- <small>FRANV6X / ARGENTINA / CS2</small>
+  <div class="hero-art premium-webgl" id="hero-art">
+  <div class="hero-still" aria-hidden="true"><div class="hero-still-grid"></div><div class="hero-still-logo">V6X</div><div class="hero-still-floor"></div></div>
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="scene-vignette" aria-hidden="true"></div>
+  <div class="scene-topline" aria-hidden="true"><span>FRANV6X / ARGENTINA</span><span>INDEPENDENT CREATOR</span></div>
+  <div class="scene-controls"><span class="scene-status" id="scene-status">UNIVERSO V6X</span><button id="enable-gyro" type="button" hidden>Activar movimiento</button></div>
+  <small>ORIGINAL / 3D ENVIRONMENT</small>
 </div>
   <div class="hero-copy">
    <div class="eyebrow">Creador independiente · Counter-Strike 2</div>
@@ -63,26 +58,36 @@
    <div class="action-row"><a class="btn btn-primary" href="#workshop">Explorar Workshop</a><a class="btn btn-ghost" href="#colaboraciones">Conocer el proyecto</a></div><div class="hero-socials" aria-label="Redes oficiales"><a href="https://www.tiktok.com/@franv6x" target="_blank" rel="noopener noreferrer">TikTok ↗</a><a href="https://www.instagram.com/franv6x/" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="https://www.youtube.com/@franv6x" target="_blank" rel="noopener noreferrer">YouTube ↗</a><a href="https://kick.com/franv6x" target="_blank" rel="noopener noreferrer">Kick ↗</a><a href="https://discord.gg/gtzqGnXJwG" target="_blank" rel="noopener noreferrer">Discord ↗</a></div>
   </div>
  </section>
- <div class="metrics" aria-label="Métricas del canal"><div class="container"><div class="metrics-grid" id="metrics-grid"><p class="muted">Cargando métricas…</p></div><p class="metrics-foot" id="metrics-date">Datos de audiencia</p></div></div>
+ <div class="metrics" aria-label="Métricas del canal"><div class="container"><div class="metrics-grid" id="metrics-grid"><div class="metric-skeleton" aria-hidden="true"></div><div class="metric-skeleton" aria-hidden="true"></div><div class="metric-skeleton" aria-hidden="true"></div><div class="metric-skeleton" aria-hidden="true"></div></div><p class="metrics-foot" id="metrics-date">Datos de audiencia</p></div></div>
  <section id="workshop" class="section" aria-labelledby="workshop-title"><div class="container">
   <div class="eyebrow">01 / Mapas seleccionados</div>
   <h2 id="workshop-title" class="section-title">CS2 Workshop.</h2>
   <p class="section-intro">Una selección de mapas de entrenamiento que comparto con la comunidad. Cada tarjeta abre el mapa exacto en Steam. Los autores originales están acreditados.</p>
   <div class="filter-row" id="map-filters" aria-label="Filtrar mapas por categoría"></div>
-  <div class="grid map-grid" id="map-grid"><p class="muted">Cargando selección de mapas…</p></div>
+  <div class="grid map-grid" id="map-grid"><div class="map-skeleton" aria-hidden="true"></div><div class="map-skeleton" aria-hidden="true"></div><div class="map-skeleton" aria-hidden="true"></div></div>
  </div></section>
  <section id="contenido" class="section" aria-labelledby="content-title"><div class="container">
   <div class="eyebrow">02 / Videos y descubrimientos</div><h2 id="content-title" class="section-title">Contenido destacado.</h2>
-  <p class="section-intro">CS2, entrenamiento, opinión y proyectos de la comunidad. TODO: destacar videos específicos cuando estén seleccionados.</p>
+  <p class="section-intro">Opinión, entrenamiento y descubrimientos alrededor de Counter-Strike. Explorá el contenido y sumate a la conversación.</p>
   <div class="grid content-grid" id="clips-grid"></div>
  </div></section>
  <section id="comunidad" class="section" aria-labelledby="community-title"><div class="container community-layout">
   <div><div class="eyebrow">03 / No se juega solo</div><h2 id="community-title" class="section-title">Una comunidad que participa.</h2><p class="section-intro">Compartimos herramientas, organizamos torneos y debatimos sobre Counter-Strike. El Discord es el punto de encuentro.</p><a class="btn btn-primary" href="https://discord.gg/gtzqGnXJwG" id="discord-link" target="_blank" rel="noopener noreferrer">Entrar al Discord</a><p id="discord-todo" hidden>TODO: agregar invitación de Discord.</p></div>
   <div><h3>Encontrame también en</h3><div class="action-row" id="social-links"></div><p class="muted">TikTok · Instagram · YouTube · Kick</p></div>
  </div></section>
+<section id="servidor" class="section server-section" aria-labelledby="server-title"><div class="container">
+<div class="eyebrow">05 / Comunidad competitiva</div><h2 id="server-title" class="section-title">Servidor <span class="gold-text">V6X.</span></h2>
+<div class="server-card"><div class="server-art" aria-hidden="true"><div class="server-art-core">V6X</div><span>SERVER NODE / ARG</span></div>
+<div class="server-content"><div class="server-topline"><span id="server-state" class="server-state">Próximamente</span><span id="server-region">Argentina / Sudamérica</span></div>
+<h3 id="server-name">Servidor V6X</h3><p id="server-mode" class="muted">Comunidad CS2</p>
+<ul id="server-rules" class="server-rules"></ul>
+<p id="server-live-data" class="server-meta" hidden></p>
+<div class="action-row"><a class="btn btn-primary" href="https://discord.gg/gtzqGnXJwG" target="_blank" rel="noopener noreferrer">Avisame cuando abra ↗</a><a id="server-connect" class="btn btn-ghost" href="#" hidden>Conectarse</a><button id="server-copy" class="btn btn-ghost" type="button" hidden>Copiar IP</button></div>
+<p class="server-legal">Proyecto comunitario independiente. No oficial ni afiliado a Valve.</p></div></div>
+</div></section>
  <section id="colaboraciones" class="section" aria-labelledby="collab-title"><div class="container partner-layout">
-  <div><div class="eyebrow">04 / Marcas y alianzas</div><h2 id="collab-title" class="section-title">Trabajemos juntos.</h2><p class="section-intro">Integraciones en videos, directos, torneos y activaciones con una comunidad enfocada en gaming y Counter-Strike.</p><p>Un proyecto independiente con contenido propio y vínculo directo con su audiencia.</p><div id="brand-list"><h3>Colaboraciones previas</h3></div></div>
-  <div class="partner-panel"><h3>¿Tenés una propuesta?</h3><p class="muted">Podemos conversar sobre formatos, objetivos y cómo llevar la marca a la comunidad.</p><div id="contact-actions"></div><p class="muted">Los contactos y materiales comerciales se incorporarán cuando estén verificados.</p></div>
+  <div><div class="eyebrow">04 / Marcas y alianzas</div><h2 id="collab-title" class="section-title">Trabajemos juntos.</h2><p class="section-intro">Integraciones en videos, directos, torneos y activaciones con una comunidad enfocada en gaming y Counter-Strike.</p><p>Un proyecto independiente con contenido propio y vínculo directo con su audiencia.</p><div id="brand-list"><h3>Colaboraciones</h3></div></div>
+  <div class="partner-panel"><h3>¿Tenés una propuesta?</h3><p class="muted">Podemos conversar sobre formatos, objetivos y cómo llevar la marca a la comunidad.</p><div id="contact-actions"></div><p class="muted">Integraciones en video, directos, torneos y activaciones pensadas para la comunidad.</p></div>
  </div></section>
 </main>
 <footer class="footer"><div class="container footer-content"><div><div class="brand">FRAN<b>V6X</b></div><p class="legal">Sitio independiente de fans y creadores; no afiliado ni respaldado por Valve. Counter-Strike, sus imágenes, nombres y objetos pertenecen a sus respectivos titulares. Simulador visual sin apuestas, dinero real ni premios.</p><p class="muted">© 2026 FranV6X · Argentina</p></div><div><a href="#inicio">Volver arriba</a><a id="discord-nav" href="https://discord.gg/gtzqGnXJwG" target="_blank" rel="noopener noreferrer">Entrar al Discord</a><a href="#colaboraciones">Colaboraciones</a><a href="./skins.html">Mercado de skins</a></div></div></footer>
